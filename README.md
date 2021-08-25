@@ -10,8 +10,8 @@ This producetool is used for produce(work item-->pull request-->review-->checkin
 - dir-->Check if there is a folder with dotNetcore Version
 - cd source path(If there is no existence, enter the source code directory)
 - produce netcore
-- msbuild -t:restore
-- NoError-->bcc-->NoError-->root-->git status-->git add .-->git commit -m "Produce xxx.dll"-->git push
+- msbuild -t:restore-->NoError-->bcc-->NoError-->update DotNetCoreMigration/DotNetCoreMigrationAlignment.md
+- root-->git status-->git add .-->git commit -m "Produce xxx.dll"-->git push
 - Go to [PR](https://o365exchange.visualstudio.com/O365%20Core/_workitems/edit/1780212/), Create a pull request.
 - Wait for review & Focus
 - Solve some question and comments
