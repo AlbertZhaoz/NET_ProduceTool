@@ -14,7 +14,7 @@ namespace ProduceTools.Extensions
 
         private string Src { get; set; }
 
-        public 
+        public void GetGitVersion() => GitCommand.GitCommandExcute(this.Src, "git --version");
         public void Clone(string repo) => GitCommand.GitCommandExcute(this.Src, "git clone " + repo + " .");
         public void Chekcout(string branch) => GitCommand.GitCommandExcute(this.Src, "git checkout " + branch);
         public void NewBranch(string branchName) => GitCommand.GitCommandExcute(this.Src, "git checkout -b " + branchName);
