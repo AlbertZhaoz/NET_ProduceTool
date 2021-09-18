@@ -1,5 +1,5 @@
 # producetool
-This producetool is used for four item:
+This producetool is used for four items:
 1. git extensions
 2. produce(work item-->pull request-->review-->checkin)
 3. simple web crawler
