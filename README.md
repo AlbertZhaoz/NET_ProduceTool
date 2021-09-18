@@ -10,7 +10,10 @@ This producetool is used for four items:
 ```
 git clone https://github.com/AlbertZhaohongyong/producetool.git
 ```
-2. Open ProduceTools-Albert.sln by visual studio2019/2022.Rebuild solution(If some nuget is missing, you must restore nuget package).
+2. Open ProduceTools-Albert.sln by visual studio2019/2022.Rebuild solution(If some nuget is missing, you must restore nuget package).Tools-Nuget Package Manager-Package Manager Console
+```
+msbuild -t:restore
+```
 3. If you run Albert.sln successfully, you need to enter the bin\Debug\net5.0 folder of the project.Then, you must set the environment variables like this:
 ```
 environment variables Path E:\Gitee\producetool\ProduceTools\bin\Debug\net5.0
