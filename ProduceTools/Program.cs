@@ -66,7 +66,7 @@ namespace Albert
                     ExceptionlessClient.Default.Startup(serilogExtension.ExceptionlessClientDefaultStartUpKey);
                     ExceptionlessClient.Default.Configuration.SetDefaultMinLogLevel(Exceptionless.Logging.LogLevel.Trace);
                     service.AddLogging(e => {
-                        Log.Logger = new LoggerConfiguration().MinimumLevel.Error()
+                        Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
                         .Enrich.FromLogContext()
                         .WriteTo.Console(new JsonFormatter())
                         .WriteTo.Exceptionless()
