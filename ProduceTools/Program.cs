@@ -21,7 +21,6 @@ namespace ProduceTools
         /// 另一种是常规Produce流程：在readme.md文件中已描述</remarks>
         static void Main(string[] args)
         {
-            Console.WriteLine(args[0]);
             var service = new ServiceCollection();
             service.AddScoped<GitExtension>();
 
@@ -37,15 +36,21 @@ namespace ProduceTools
             using(var sp = service.BuildServiceProvider())
             {
                 ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
-                if (args[0].Contains("albertgit"))
-                {
-                    var gitExtensions = sp.GetRequiredService<GitExtension>();
-                    gitExtensions.OpenInput("cd ..");
-                    gitExtensions.GitAdd();
+                if ((!string.IsNullOrEmpty(args[0])) &&args[0].Contains("albertgit"))
+                {               
                     //解析args[0]
-                    string comment = args[0].Split(" ").Last();
-                    gitExtensions.Commit(comment);
-                    gitExtensions.Push();
+                    if (!string.IsNullOrEmpty(args[1]))
+                    {
+                        var gitExtensions = sp.GetRequiredService<GitExtension>();
+                        gitExtensions.OpenInput("cd ..");
+                        gitExtensions.GitAdd();
+                        string comment = args[1].Split(" ").Last();
+                        gitExtensions.Commit(comment);
+                        gitExtensions.Push();
+                        Console.WriteLine("Run Successfully!");
+                    }
+                    else Console.WriteLine("Please input some comments.");
+                   
                 }                     
             }         
         }
