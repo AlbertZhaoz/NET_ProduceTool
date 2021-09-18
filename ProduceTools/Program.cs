@@ -27,10 +27,12 @@ namespace ProduceTools
         /// </para>
         /// </summary>
         /// <param name="args"></param>
-        /// <remarks>目前预计支持四类工具，1.Git拓展：简化git流程，不需要整一大堆指令;
+        /// <remarks>
+        /// 目前预计支持四类工具:1.Git拓展：简化git流程，不需要整一大堆指令;
         /// 2.常规Produce流程：在readme.md文件中已描述；
         /// 3.常规网站的爬虫程序；
-        /// 4.Azure云反爬虫的爬虫程序</remarks>
+        /// 4.Azure云反爬虫的爬虫程序
+        /// </remarks>
         static void Main(string[] args)
         {
             InitService();

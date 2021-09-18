@@ -12,7 +12,7 @@
   },
   "SerilogConfig": {
     "ExceptionlessClientDefaultStartUpKey": "xxx",
-    "SerilogFilePath": "xxx"
+    "SerilogFilePath": "D:\\SerilogFile\\serilog.txt"
   },
   "PersonalCrawling": {
     "PersonalCrawlingSite": "https://www.cnblogs.com/",
