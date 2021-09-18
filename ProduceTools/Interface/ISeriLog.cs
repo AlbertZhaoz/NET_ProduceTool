@@ -8,6 +8,8 @@ namespace Albert.Interface
 {
     public interface ISeriLog
     {
-
+        public string ExceptionlessClientDefaultStartUpKey { get; set; }
+        public string SerilogFilePath { get; set; }
+        bool OpenExceptionlessClient();
     }
 }

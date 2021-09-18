@@ -10,12 +10,15 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Formatting.Json;
 using Albert.Interface;
+using Exceptionless;
+using Microsoft.Extensions.Logging;
 
 namespace ProduceTools
 {
     class Program
     {
         private static ServiceCollection service = new ServiceCollection();
+
         /// <summary>
         /// <para>初始化DI:<see cref="InitService"/>
         /// </para>
@@ -48,6 +51,7 @@ namespace ProduceTools
             service.AddGitExtensions();
             service.AddSimpleCrawlerExtensions();
             service.AddSerilogExtensions();
+            //service.AddScoped<Program>();
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();        
             configurationBuilder.AddJsonFile("Settings\\ProduceTool.Json", false, true);
@@ -60,16 +64,33 @@ namespace ProduceTools
                 .Configure<AzureDevOps>(e => rootConfig.GetSection("AzureDevOps").Bind(e))
                 .Configure<PersonalCrawling>(e => rootConfig.GetSection("PersonalCrawling").Bind(e));
 
-            
-
-            service.AddLogging(e => {
-                Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
-                .Enrich.FromLogContext()
-                .WriteTo.Console(new JsonFormatter())
-                .WriteTo.Exceptionless()
-                .CreateLogger();
-                e.AddSerilog();
-            });
+            using (var sp = service.BuildServiceProvider())
+            {
+                var serilogExtension = sp.GetRequiredService<ISeriLog>();
+                if (serilogExtension.OpenExceptionlessClient())
+                {
+                    ExceptionlessClient.Default.Startup(serilogExtension.ExceptionlessClientDefaultStartUpKey);
+                    ExceptionlessClient.Default.Configuration.SetDefaultMinLogLevel(Exceptionless.Logging.LogLevel.Trace);
+                    service.AddLogging(e => {
+                        Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+                        .Enrich.FromLogContext()
+                        .WriteTo.Console(new JsonFormatter())
+                        .WriteTo.Exceptionless()
+                        .CreateLogger();
+                        e.AddSerilog();
+                    });
+                }
+                else
+                {
+                    service.AddLogging(e => {
+                        Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+                        .Enrich.FromLogContext()
+                        .WriteTo.Console(new JsonFormatter())
+                        .CreateLogger();
+                        e.AddSerilog();
+                    });
+                }
+            }            
         }
 
         static void AlbertGitExtensions(string[] args)
@@ -110,6 +131,7 @@ namespace ProduceTools
                         var simpleCrawlerExtension = sp.GetRequiredService<ICrawler>();
                         simpleCrawlerExtension.OnStart += (s, e) =>
                         {
+                            //logger.LogError("爬虫开始抓取地址");
                             Console.WriteLine("爬虫开始抓取地址：" + e.Uri.ToString());
                         };
                         simpleCrawlerExtension.OnError += (s, e) =>
