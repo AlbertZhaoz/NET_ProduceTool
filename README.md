@@ -6,7 +6,7 @@ This producetool is used for four item:
 4. azure analysis
 
 # Git Extensions
-Inputing ```albert -git info``` is equivalent to execute combined: command
+Inputing ```albert -git info``` is equivalent to execute combined command.
 ```
 1.cd ..
 2.git add .
