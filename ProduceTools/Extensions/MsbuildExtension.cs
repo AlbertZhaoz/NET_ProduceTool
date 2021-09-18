@@ -34,7 +34,7 @@ namespace ProduceTools.Extensions
                 process.ErrorDataReceived += new DataReceivedEventHandler(ErrorEventHandler);
                 process.Start();
 
-                process.StandardInput.WriteLine("\"%ProgramFiles(x86)%\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\Tools\\VsDevCmd.bat\"");
+                process.StandardInput.WriteLine("\"%ProgramFiles(x86)%\\Microsoft Visual Studio\\2022\\Preview\\Common7\\Tools\\VsDevCmd.bat\"");
                 process.StandardInput.WriteLine(command);
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();

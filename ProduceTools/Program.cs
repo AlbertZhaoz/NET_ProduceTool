@@ -4,32 +4,49 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Net;
+using Microsoft.Extensions.DependencyInjection;
+using ProduceTools.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace ProduceTools
 {
     class Program
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <remarks>目前预计支持两类工具，一种是简化git流程，不需要整一大堆指令;
+        /// 另一种是常规Produce流程：在readme.md文件中已描述</remarks>
         static void Main(string[] args)
         {
-            string url = "https://o365exchange.visualstudio.com/O365%20Core/_workitems/assignedtome/";
-            using (HttpClient client = new HttpClient())
+            var service = new ServiceCollection();
+            service.AddScoped<GitExtension>();
+
+            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+            configurationBuilder.AddJsonFile("Settings\\ProduceTool.Json", false, true);
+            var rootConfig = configurationBuilder.Build();
+
+            service.AddOptions().Configure<ProduceToolEntity>(e => rootConfig.Bind(e))
+                .Configure<Git>(e => rootConfig.GetSection("Git").Bind(e))
+                .Configure<MsBuild>(e => rootConfig.GetSection("MsBuild").Bind(e))
+                .Configure<WebClient>(e => rootConfig.GetSection("WebClient").Bind(e));
+
+            using(var sp = service.BuildServiceProvider())
             {
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(
-                    string.Format("{0}:{1}", "", ""))));
-                using (HttpResponseMessage responseMessage = client.GetAsync(url).Result)
+                ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
+                if (args[0].Contains("albertgit"))
                 {
-                    responseMessage.EnsureSuccessStatusCode();
-                    string responseString = responseMessage.Content.ReadAsStringAsync().Result;
-                    XDocument xml = XDocument.Load(new StringReader(responseString));
-                    string version = xml.Root.Elements()
-                        .Where(x => x.Name.LocalName == "ItemGroup").Elements()
-                        .Where(x => x.Name.LocalName == "PackageReference")
-                        .FirstOrDefault(x => x.Attribute("Update").Value.Equals("Microsoft.Exchange.MapiAbstraction", StringComparison.OrdinalIgnoreCase)).Attribute("Version").Value;
-                    version = Regex.Match(version, @"\[(.*)\]").Groups[1].Value;
-                    System.Console.WriteLine(version);
-                }
-            }
+                    var gitExtensions = sp.GetRequiredService<GitExtension>();
+                    gitExtensions.OpenInput("cd ..");
+                    gitExtensions.GitAdd();
+                    //解析args[0]
+                    string comment = args[0].Split(" ").Last();
+                    gitExtensions.Commit(comment);
+                    gitExtensions.Push();
+                }                     
+            }         
         }
     }
 }

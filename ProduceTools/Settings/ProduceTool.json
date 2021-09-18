@@ -1,7 +1,14 @@
 {
-    "WebClient":{
-        "WorkItemAddress":"https://o365exchange.visualstudio.com/O365%20Core/_workitems/assignedtome/",
-        "DefaultRequestHeaders_Accept":"application/json",
-        "DefaultRequestHeaders_Authorization":""
-    }
+  "Repo": {
+    "DefaultPath": "F:\\AlbertZhao's Study\\producetool"
+  },
+  "Git": {
+    "Path": "F:\\AlbertZhao's Study\\producetool"
+  },
+  "MsBuild": {
+    "Path": ""
+  },
+  "WebClient": {
+    "WebHttp": "www.baidu.com"
+  }
 }
