@@ -88,8 +88,6 @@ namespace ProduceTools
                 ///普通网站的爬虫，重定向问题需要单独配置相关的设置
                 if ((!string.IsNullOrEmpty(args[0])) && args[0].Contains("crawl"))
                 {
-                    if (!string.IsNullOrEmpty(args[1]))
-                    {
                         var simpleCrawlerExtension = sp.GetRequiredService<SimpleCrawlerExtension>();
                         simpleCrawlerExtension.OnStart += (s, e) =>
                         {
@@ -112,8 +110,6 @@ namespace ProduceTools
                             Console.WriteLine("地址：" + e.Uri.ToString());
                         };
                         simpleCrawlerExtension.Start().Wait();
-                    }
-                    else Console.WriteLine("Please input some comments.");
                 }
             }
         }
