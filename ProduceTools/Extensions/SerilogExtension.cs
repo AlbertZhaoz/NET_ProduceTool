@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Albert.Interface;
+using Microsoft.Extensions.Options;
 using ProduceTools;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Albert.Extensions
 {
-    public class SerilogExtension
+    public class SerilogExtension: ISeriLog
     {
         private readonly IOptionsSnapshot<ProduceToolEntity> options;
 

@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
 
-namespace AutoConsume
+namespace Albert.Extensions
 {
     class AzureDevOpsExtension
     {

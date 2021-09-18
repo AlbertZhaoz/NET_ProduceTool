@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProduceTools.Interface
+namespace Albert.Interface
 {
     public interface ICrawler
     {
@@ -14,6 +14,6 @@ namespace ProduceTools.Interface
         event EventHandler<OnCompletedEventArgs> OnCompleted;//爬虫完成事件
 
         event EventHandler<OnErrorEventArgs> OnError;//爬虫出错事件
-        Task<string> Start(string proxy); //异步爬虫
+        Task<string> Start(string proxy = null); //异步爬虫
     }
 }

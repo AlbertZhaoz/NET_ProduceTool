@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace ProduceTools.Extensions
+namespace Albert.Extensions
 {
     public class MsbuildExtension
     {

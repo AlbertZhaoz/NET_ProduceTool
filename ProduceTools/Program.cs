@@ -6,8 +6,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
-using ProduceTools.Extensions;
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Formatting.Json;
+using Albert.Interface;
 
 namespace ProduceTools
 {
@@ -35,6 +37,7 @@ namespace ProduceTools
         /// </remarks>
         static void Main(string[] args)
         {
+
             InitService();
             AlbertGitExtensions(args);
             AlbertSimpleCrawl(args);
@@ -42,8 +45,9 @@ namespace ProduceTools
 
         static void InitService()
         {
-            service.AddScoped<GitExtension>();
-            service.AddScoped<SimpleCrawlerExtension>();
+            service.AddGitExtensions();
+            service.AddSimpleCrawlerExtensions();
+            service.AddSerilogExtensions();
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();        
             configurationBuilder.AddJsonFile("Settings\\ProduceTool.Json", false, true);
@@ -55,6 +59,17 @@ namespace ProduceTools
                 .Configure<MsBuild>(e => rootConfig.GetSection("MsBuild").Bind(e))
                 .Configure<AzureDevOps>(e => rootConfig.GetSection("AzureDevOps").Bind(e))
                 .Configure<PersonalCrawling>(e => rootConfig.GetSection("PersonalCrawling").Bind(e));
+
+            
+
+            service.AddLogging(e => {
+                Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+                .Enrich.FromLogContext()
+                .WriteTo.Console(new JsonFormatter())
+                .WriteTo.Exceptionless()
+                .CreateLogger();
+                e.AddSerilog();
+            });
         }
 
         static void AlbertGitExtensions(string[] args)
@@ -66,7 +81,7 @@ namespace ProduceTools
                 {
                     if (!string.IsNullOrEmpty(args[1]))
                     {
-                        var gitExtensions = sp.GetRequiredService<GitExtension>();
+                        var gitExtensions = sp.GetRequiredService<IGit>();
                         gitExtensions.OpenInput("cd ..");
                         gitExtensions.GitAdd();
                         string comment = args[1];
@@ -92,7 +107,7 @@ namespace ProduceTools
                 ///普通网站的爬虫，重定向问题需要单独配置相关的设置
                 if ((!string.IsNullOrEmpty(args[0])) && args[0].Contains("crawl"))
                 {
-                        var simpleCrawlerExtension = sp.GetRequiredService<SimpleCrawlerExtension>();
+                        var simpleCrawlerExtension = sp.GetRequiredService<ICrawler>();
                         simpleCrawlerExtension.OnStart += (s, e) =>
                         {
                             Console.WriteLine("爬虫开始抓取地址：" + e.Uri.ToString());

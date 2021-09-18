@@ -1,14 +1,11 @@
 ﻿using Albert.Interface;
 using Microsoft.Extensions.Options;
+using ProduceTools;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ProduceTools.Extensions
+namespace Albert.Extensions
 {
     public class GitExtension: IGit
     {

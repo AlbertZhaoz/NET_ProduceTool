@@ -1,18 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Albert.Interface;
 using Microsoft.Extensions.Options;
+using ProduceTools;
 using ProduceTools.Events;
-using ProduceTools.Interface;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ProduceTools.Extensions
+namespace Albert.Extensions
 {
     public class SimpleCrawlerExtension : ICrawler
     {
