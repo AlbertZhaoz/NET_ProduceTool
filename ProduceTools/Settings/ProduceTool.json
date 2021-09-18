@@ -11,7 +11,7 @@
     "ArtifactIDTemplate": "vstfs:///CodeReview/CodeReviewId/{0}/{1}"
   },
   "SerilogConfig": {
-    "ExceptionlessClientDefaultStartUpKey": "up5uzK6h92iGTN6ZAXNkiVecefPRWFLuwp45Chfd",
+    "ExceptionlessClientDefaultStartUpKey": "xxx",
     "SerilogFilePath": "xxx"
   },
   "PersonalCrawling": {
