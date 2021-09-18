@@ -47,9 +47,9 @@ namespace Albert
             service.AddSimpleCrawlerExtensions();
             service.AddSerilogExtensions();
 
-            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();        
-            configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);
+            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
+            configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);           
             var rootConfig = configurationBuilder.Build();
 
             service.AddOptions().Configure<ProduceToolEntity>(e => rootConfig.Bind(e))

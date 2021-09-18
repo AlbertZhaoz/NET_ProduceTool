@@ -1,10 +1,28 @@
-# producetool
+# ProduceTool
 This producetool is used for four items:
 1. git extensions
 2. produce(work item-->pull request-->review-->checkin)
 3. simple web crawler
 4. azure analysis
 
+# Getting started
+1. Click Code-Download ZIP or Open cmd.exe and run commands:
+```
+git clone https://github.com/AlbertZhaohongyong/producetool.git
+```
+2. Open ProduceTools-Albert.sln by visual studio2019/2022.Rebuild solution(If some nuget is missing, you must restore nuget package).
+3. If you run Albert.sln successfully, you need to enter the bin\Debug\net5.0 folder of the project.Then, you must set the environment variables like this:
+```
+environment variables Path E:\Gitee\producetool\ProduceTools\bin\Debug\net5.0
+```
+4. Run cmd.exe to perform some supported operations.
+5. Others config:you need to modify bin\Debug\net5.0\Configs\ProduceTool.json
+6. Use exceptionless to record logs, you must modify bin\Debug\net5.0\Configs\ProduceTool.json SerilogConfig-Except of your api key.
+```
+"SerilogConfig": {
+    "ExceptionlessClientDefaultStartUpKey": "YOUR_API_KEY"
+  }
+```
 # Git Extensions
 Inputing ```albert -git info``` is equivalent to execute combined command.
 ```
