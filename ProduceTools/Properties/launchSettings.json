@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ProduceTools": {
+      "commandName": "Project",
+      "commandLineArgs": "ProduceTools albertgit testInfo"
+    }
+  }
+}

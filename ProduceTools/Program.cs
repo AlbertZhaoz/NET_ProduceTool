@@ -36,14 +36,12 @@ namespace ProduceTools
             using(var sp = service.BuildServiceProvider())
             {
                 ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
-                if (args[0].Contains("albertgit"))
+                if (args.Contains("albertgit"))
                 {
                     var gitExtensions = sp.GetRequiredService<GitExtension>();
                     gitExtensions.OpenInput("cd ..");
                     gitExtensions.GitAdd();
-                    //解析args[0]
-                    string comment = args[0].Split(" ").Last();
-                    gitExtensions.Commit(comment);
+                    gitExtensions.Commit(args[2]);
                     gitExtensions.Push();
                 }                     
             }         
