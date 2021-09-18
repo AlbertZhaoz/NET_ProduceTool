@@ -15,7 +15,13 @@ git clone https://github.com/AlbertZhaohongyong/producetool.git
 ```
 environment variables Path E:\Gitee\producetool\ProduceTools\bin\Debug\net5.0
 ```
-4. Run cmd.exe to perform some supported operations.
+4. Run cmd.exe to perform some supported operations like:
+```
+albert git "submit your comments"
+albert crawl
+albert produce(Not support currently)
+albert azure(Not support currently)
+```
 5. Others config:you need to modify bin\Debug\net5.0\Configs\ProduceTool.json
 6. Use exceptionless to record logs, you must modify bin\Debug\net5.0\Configs\ProduceTool.json SerilogConfig-Except of your api key.
 ```
