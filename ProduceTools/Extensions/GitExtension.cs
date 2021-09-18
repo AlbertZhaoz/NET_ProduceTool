@@ -17,7 +17,7 @@ namespace ProduceTools.Extensions
         public GitExtension(IOptionsSnapshot<ProduceToolEntity> options)
         {
             this.options = options;
-            this.Src = options.Value.Git.Path;
+            this.Src = options.Value.Repo.DefaultPath;
         }
         public void ChangeSrc(string newPath) => this.Src = newPath;     
         public void OpenInput(string cmd)=> GitCommand.GitCommandExcute(this.Src, cmd);

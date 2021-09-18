@@ -1,6 +1,11 @@
 # producetool
-This producetool is used for produce(work item-->pull request-->review-->checkin)
+This producetool is used for four item:
+1. git extensions
+2. produce(work item-->pull request-->review-->checkin)
+3. simple web crawler
+4. azure analysis
 
+# 
 # Process
 - Get the DLL name from WorkItem
 - Use [Tool](http://10.158.22.18/#/QueryAssemblyDetail) to Analyze the source path of dll.
