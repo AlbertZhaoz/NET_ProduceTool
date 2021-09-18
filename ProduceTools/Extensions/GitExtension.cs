@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Albert.Interface;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ProduceTools.Extensions
 {
-    public class GitExtension
+    public class GitExtension: IGit
     {
         private string Src { get; set; }
         private readonly IOptionsSnapshot<ProduceToolEntity> options;
