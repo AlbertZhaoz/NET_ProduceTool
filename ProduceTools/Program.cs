@@ -45,8 +45,9 @@ namespace ProduceTools
             service.AddScoped<GitExtension>();
             service.AddScoped<SimpleCrawlerExtension>();
 
-            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();        
             configurationBuilder.AddJsonFile("Settings\\ProduceTool.Json", false, true);
+            configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
             var rootConfig = configurationBuilder.Build();
 
             service.AddOptions().Configure<ProduceToolEntity>(e => rootConfig.Bind(e))
