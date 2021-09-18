@@ -52,6 +52,7 @@ namespace Albert
             service.AddGitExtensions();
             service.AddSimpleCrawlerExtensions();
             service.AddSerilogExtensions();
+            //This is the test information.
             //service.AddScoped<Program>();
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();        
