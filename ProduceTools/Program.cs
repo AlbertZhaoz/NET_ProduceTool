@@ -101,6 +101,7 @@ namespace ProduceTools
                         };
                         simpleCrawlerExtension.OnCompleted += (s, e) =>
                         {
+                            Console.WriteLine(e.PageSource);
                             //使用正则表达式清洗网页源代码中的数据
                             var links = Regex.Matches(e.PageSource, @"<a[^>]+href=""*(?<href>/hotel/[^>\s]+)""\s*[^>]*>(?<text>(?!.*img).*?)</a>", RegexOptions.IgnoreCase);
                             foreach (Match match in links){}
