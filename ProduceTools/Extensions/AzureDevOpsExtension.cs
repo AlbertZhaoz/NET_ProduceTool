@@ -1,4 +1,5 @@
-﻿using Albert.Model;
+﻿using Albert.Interface;
+using Albert.Model;
 using Microsoft.Extensions.Options;
 using Microsoft.TeamFoundation.Policy.WebApi;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
@@ -15,7 +16,7 @@ using System.Xml.Linq;
 
 namespace Albert.Extensions
 {
-    class AzureDevOpsExtension
+    class AzureDevOpsExtension: IAzure
     {
         private readonly IOptionsSnapshot<ProduceToolEntity> options;
         private static string azureDevOpsOrganizationUrl = "https://dev.azure.com/O365Exchange";
@@ -178,6 +179,11 @@ namespace Albert.Extensions
             int prId = int.Parse(prUrl.Substring(prUrl.LastIndexOf(@"/") + 1));
             var pr = gitClient.GetPullRequestByIdAsync(prId).Result;
             return pr.Status == PullRequestStatus.Completed;
+        }
+
+        public void RunAzureDevOpsExtension(IServiceProvider sp, string[] args)
+        {
+
         }
     }
 }

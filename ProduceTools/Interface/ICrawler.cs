@@ -15,5 +15,6 @@ namespace Albert.Interface
 
         event EventHandler<OnErrorEventArgs> OnError;//爬虫出错事件
         Task<string> Start(string proxy = null); //异步爬虫
+        void RunSimpleCrawlerExtension(IServiceProvider sp, string[] args);//执行爬虫
     }
 }

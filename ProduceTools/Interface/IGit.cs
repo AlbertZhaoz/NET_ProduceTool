@@ -24,6 +24,6 @@ namespace Albert.Interface
         void Push(string branchName);
         void DeleteBranch(string branchName);
         void ProduceNetCore();
-        void RunGitExtensions(IServiceCollection service, string[] args);
+        void RunGitExtensions(IServiceProvider sp, string[] args);
     }
 }

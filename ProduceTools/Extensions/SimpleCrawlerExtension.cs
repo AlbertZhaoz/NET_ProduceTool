@@ -1,5 +1,7 @@
 ﻿using Albert.Interface;
 using Albert.Model;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ProduceTools.Events;
 using System;
@@ -8,6 +10,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Albert.Extensions
@@ -15,6 +18,7 @@ namespace Albert.Extensions
     public class SimpleCrawlerExtension : ICrawler
     {
         private readonly IOptionsSnapshot<ProduceToolEntity> options;//依赖注入可选项
+        private readonly ILogger<SimpleCrawlerExtension> loggers;
 
         public event EventHandler<OnStartEventArgs> OnStart;//爬虫启动事件
 
@@ -24,8 +28,10 @@ namespace Albert.Extensions
 
         public CookieContainer CookiesContainer { get; set; }//定义Cookie容器
 
-        public SimpleCrawlerExtension(IOptionsSnapshot<ProduceToolEntity> options) {
+        public SimpleCrawlerExtension(IOptionsSnapshot<ProduceToolEntity> options, ILogger<SimpleCrawlerExtension> loggers)
+        {
             this.options = options;
+            this.loggers = loggers;
         }
 
         /// <summary>
@@ -111,6 +117,36 @@ namespace Albert.Extensions
                 }
                 return pageSource;
             });
+        }
+
+        public void RunSimpleCrawlerExtension(IServiceProvider sp, string[] args)
+        {
+            ///普通网站的爬虫，重定向问题需要单独配置相关的设置
+            if ((args.Length > 0) && args[0].Contains("crawl"))
+            {
+                var simpleCrawlerExtension = sp.GetRequiredService<ICrawler>();
+                simpleCrawlerExtension.OnStart += (s, e) =>
+                {
+                    Console.WriteLine("爬虫开始抓取地址：" + e.Uri.ToString());
+                    loggers.LogInformation("爬虫开始抓取地址：{@url}", e.Uri.ToString());
+                };
+                simpleCrawlerExtension.OnError += (s, e) =>
+                {
+                    Console.WriteLine("爬虫抓取出现错误：" +e.Exception.Message);
+                    loggers.LogError("爬虫抓取出现错误：" + e.Exception.Message);
+                };
+                simpleCrawlerExtension.OnCompleted += (s, e) =>
+                {
+                    Console.WriteLine(e.PageSource);
+                    //使用正则表达式清洗网页源代码中的数据
+                    var links = Regex.Matches(e.PageSource, @"<a[^>]+href=""*(?<href>/hotel/[^>\s]+)""\s*[^>]*>(?<text>(?!.*img).*?)</a>", RegexOptions.IgnoreCase);
+                    foreach (Match match in links) { }
+                    Console.WriteLine("===============================================");
+                    Console.WriteLine($"爬虫抓取任务完成！\n耗时：{e.Milliseconds}毫秒\n线程：{e.ThreadId}\n地址：{e.Uri.ToString()}");
+                    loggers.LogInformation($"爬虫抓取任务完成！\n耗时：{e.Milliseconds}毫秒\n线程：{e.ThreadId}\n地址：{e.Uri.ToString()}");
+                };
+                simpleCrawlerExtension.Start().Wait();
+            }
         }
     }
 }

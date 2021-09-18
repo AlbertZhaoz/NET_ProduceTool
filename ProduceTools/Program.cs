@@ -1,17 +1,9 @@
-﻿using System.Xml.Linq;
-using System.Net.Http;
-using System;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Net;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Formatting.Json;
 using Albert.Interface;
 using Exceptionless;
-using Microsoft.Extensions.Logging;
 using Albert.Model;
 
 namespace Albert
@@ -23,13 +15,13 @@ namespace Albert
         /// <summary>
         /// <para>初始化DI:<see cref="InitService"/>
         /// </para>
-        /// <para>Git拓展:<see cref="AlbertGitExtensions"/>
+        /// <para>Git拓展:<see cref="Extensions.GitExtension.RunGitExtensions"/>
         /// </para>
-        /// <para>Produce自动化:<see cref="AlbertProduce"/>
+        /// <para>Produce自动化:<see cref="Extensions.ProduceExtension.RunProduceExtensions"/>
         /// </para>
-        /// <para>常规网站爬虫：<see cref="AlbertSimpleCrawl"/>
+        /// <para>常规网站爬虫：<see cref="Extensions.SimpleCrawlerExtension.RunSimpleCrawlerExtension"/>
         /// </para>
-        /// <para>Azure云API分析：<see cref="AlbertAzureExtensions"/>
+        /// <para>Azure云API分析：<see cref="Extensions.AzureDevOpsExtension.RunAzureDevOpsExtension"/>
         /// </para>
         /// </summary>
         /// <param name="args"></param>
@@ -41,13 +33,12 @@ namespace Albert
         /// </remarks>
         static void Main(string[] args)
         {
-
             InitService();
             using (var sp = service.BuildServiceProvider())
             {
-                sp.GetRequiredService<IGit>().RunGitExtensions(service, args);
+                sp.GetRequiredService<IGit>().RunGitExtensions(sp, args);
+                sp.GetRequiredService<ICrawler>().RunSimpleCrawlerExtension(sp, args);
             }
-            AlbertSimpleCrawl(args);
         }
 
         static void InitService()
@@ -55,10 +46,9 @@ namespace Albert
             service.AddGitExtensions();
             service.AddSimpleCrawlerExtensions();
             service.AddSerilogExtensions();
-            //service.AddScoped<Program>();
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();        
-            configurationBuilder.AddJsonFile("Settings\\ProduceTool.Json", false, true);
+            configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);
             configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
             var rootConfig = configurationBuilder.Build();
 
@@ -76,7 +66,7 @@ namespace Albert
                     ExceptionlessClient.Default.Startup(serilogExtension.ExceptionlessClientDefaultStartUpKey);
                     ExceptionlessClient.Default.Configuration.SetDefaultMinLogLevel(Exceptionless.Logging.LogLevel.Trace);
                     service.AddLogging(e => {
-                        Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+                        Log.Logger = new LoggerConfiguration().MinimumLevel.Error()
                         .Enrich.FromLogContext()
                         .WriteTo.Console(new JsonFormatter())
                         .WriteTo.Exceptionless()
@@ -96,50 +86,5 @@ namespace Albert
                 }
             }            
         }   
-
-        static void AlbertProduce(string[] args)
-        {
-
-        }
-
-        static void AlbertSimpleCrawl(string[] args)
-        {
-            using (var sp = service.BuildServiceProvider())
-            {
-
-                ///普通网站的爬虫，重定向问题需要单独配置相关的设置
-                if ((!string.IsNullOrEmpty(args[0])) && args[0].Contains("crawl"))
-                {
-                        var simpleCrawlerExtension = sp.GetRequiredService<ICrawler>();
-                        simpleCrawlerExtension.OnStart += (s, e) =>
-                        {
-                            //logger.LogError("爬虫开始抓取地址");
-                            Console.WriteLine("爬虫开始抓取地址：" + e.Uri.ToString());
-                        };
-                        simpleCrawlerExtension.OnError += (s, e) =>
-                        {
-                            Console.WriteLine("爬虫抓取出现错误：" + e.Uri.ToString() + "，异常消息：" + e.Exception.Message);
-                        };
-                        simpleCrawlerExtension.OnCompleted += (s, e) =>
-                        {
-                            Console.WriteLine(e.PageSource);
-                            //使用正则表达式清洗网页源代码中的数据
-                            var links = Regex.Matches(e.PageSource, @"<a[^>]+href=""*(?<href>/hotel/[^>\s]+)""\s*[^>]*>(?<text>(?!.*img).*?)</a>", RegexOptions.IgnoreCase);
-                            foreach (Match match in links){}
-                            Console.WriteLine("===============================================");
-                            Console.WriteLine("爬虫抓取任务完成！");
-                            Console.WriteLine("耗时：" + e.Milliseconds + "毫秒");
-                            Console.WriteLine("线程：" + e.ThreadId);
-                            Console.WriteLine("地址：" + e.Uri.ToString());
-                        };
-                        simpleCrawlerExtension.Start().Wait();
-                }
-            }
-        }
-
-        static void AlbertAzureExtensions(string[] args)
-        {
-
-        }
     }
 }

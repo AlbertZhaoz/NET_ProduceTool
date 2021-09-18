@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Albert.Extensions
 {
-    public class GitExtension: IGit
+    public class GitExtension : IGit
     {
         private string Src { get; set; }
         private readonly IOptionsSnapshot<ProduceToolEntity> options;
@@ -21,8 +21,8 @@ namespace Albert.Extensions
             this.loggers = loggers;
             this.Src = options.Value.Repo.DefaultPath;
         }
-        public void ChangeSrc(string newPath) => this.Src = newPath;     
-        public void OpenInput(string cmd)=> GitCommand.GitCommandExcute(this.Src, cmd);
+        public void ChangeSrc(string newPath) => this.Src = newPath;
+        public void OpenInput(string cmd) => GitCommand.GitCommandExcute(this.Src, cmd);
         public void GitAdd() => GitCommand.GitCommandExcute(this.Src, "git add .");
         public void GetGitVersion() => GitCommand.GitCommandExcute(this.Src, "git --version");
         public void Clone(string repo) => GitCommand.GitCommandExcute(this.Src, "git clone " + repo + " .");
@@ -39,31 +39,28 @@ namespace Albert.Extensions
             GitCommand.GitCommandExcute(this.Src, $"git branch -D {branchName}");
             GitCommand.GitCommandExcute(this.Src, $"git push origin --delete {branchName}");
         }
-        public void ProduceNetCore()=> GitCommand.GitCommandExcute(this.Src, "produce netcore");
+        public void ProduceNetCore() => GitCommand.GitCommandExcute(this.Src, "produce netcore");
 
-        public void RunGitExtensions(IServiceCollection service,string[] args)
+        public void RunGitExtensions(IServiceProvider sp, string[] args)
         {
-            using (var sp = service.BuildServiceProvider())
+            ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
+            if ((args.Length>0) && args[0].Contains("git"))
             {
-                ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
-                if ((!string.IsNullOrEmpty(args[0])) && args[0].Contains("git"))
+                if (!string.IsNullOrEmpty(args[1]))
                 {
-                    if (!string.IsNullOrEmpty(args[1]))
-                    {
-                        var gitExtensions = sp.GetRequiredService<IGit>();
-                        gitExtensions.OpenInput("cd ..");
-                        gitExtensions.GitAdd();
-                        string comment = args[1];
-                        gitExtensions.Commit(comment);
-                        gitExtensions.Push();
-                        Console.WriteLine("Run Successfully!");
-                        loggers.LogInformation("Run Successfully!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Please input some comments.");
-                        loggers.LogInformation("Please input some comments like:albert git \"modify some files\"");
-                    }
+                    var gitExtensions = sp.GetRequiredService<IGit>();
+                    gitExtensions.OpenInput("cd ..");
+                    gitExtensions.GitAdd();
+                    string comment = args[1];
+                    gitExtensions.Commit(comment);
+                    gitExtensions.Push();
+                    Console.WriteLine("Run Successfully!");
+                    loggers.LogInformation("Run Successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Please input some comments.");
+                    loggers.LogInformation("Please input some comments like:albert git \"modify some files\"");
                 }
             }
         }
