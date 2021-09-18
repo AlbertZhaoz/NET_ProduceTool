@@ -7,7 +7,7 @@
   },
   "AzureDevOps": {
     "AzureDevOpsOrganizationUrl": "https://dev.azure.com/O365Exchange",
-    "PersonalAccessToken": "ytr3go2klqf4hpek73fcs46rmbz6vmyckkj52nzgjgn437blgk7a",
+    "PersonalAccessToken": "xxxx",
     "ArtifactIDTemplate": "vstfs:///CodeReview/CodeReviewId/{0}/{1}"
   },
   "SerilogConfig": {
