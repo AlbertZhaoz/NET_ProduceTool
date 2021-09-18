@@ -43,7 +43,10 @@ namespace Albert
         {
 
             InitService();
-            AlbertGitExtensions(args);
+            using (var sp = service.BuildServiceProvider())
+            {
+                sp.GetRequiredService<IGit>().RunGitExtensions(service, args);
+            }
             AlbertSimpleCrawl(args);
         }
 
@@ -92,29 +95,7 @@ namespace Albert
                     });
                 }
             }            
-        }
-
-        static void AlbertGitExtensions(string[] args)
-        {
-            using (var sp = service.BuildServiceProvider())
-            {
-                ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
-                if ((!string.IsNullOrEmpty(args[0])) && args[0].Contains("git"))
-                {
-                    if (!string.IsNullOrEmpty(args[1]))
-                    {
-                        var gitExtensions = sp.GetRequiredService<IGit>();
-                        gitExtensions.OpenInput("cd ..");
-                        gitExtensions.GitAdd();
-                        string comment = args[1];
-                        gitExtensions.Commit(comment);
-                        gitExtensions.Push();
-                        Console.WriteLine("Run Successfully!");
-                    }
-                    else Console.WriteLine("Please input some comments.");
-                }             
-            }
-        }
+        }   
 
         static void AlbertProduce(string[] args)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +24,6 @@ namespace Albert.Interface
         void Push(string branchName);
         void DeleteBranch(string branchName);
         void ProduceNetCore();
+        void RunGitExtensions(IServiceCollection service, string[] args);
     }
 }
