@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AutoConsume.Model
+namespace Albert.Model
 {
     class Packages
     {

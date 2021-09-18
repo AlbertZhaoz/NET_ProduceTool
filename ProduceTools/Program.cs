@@ -12,8 +12,9 @@ using Serilog.Formatting.Json;
 using Albert.Interface;
 using Exceptionless;
 using Microsoft.Extensions.Logging;
+using Albert.Model;
 
-namespace ProduceTools
+namespace Albert
 {
     class Program
     {

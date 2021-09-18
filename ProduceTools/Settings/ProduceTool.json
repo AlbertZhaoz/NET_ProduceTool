@@ -1,6 +1,6 @@
 {
   "Repo": {
-    "DefaultPath": "F:\\AlbertZhao's Study\\producetool"
+    "DefaultPath": "E:\\Gitee\\producetool"
   },
   "MsBuild": {
     "Path": "ProgramFiles\\Microsoft Visual Studio\\2022\\Preview\\Common7\\Tools\\VsDevCmd.bat"
