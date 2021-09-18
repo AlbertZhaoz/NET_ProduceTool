@@ -1,5 +1,3 @@
-#!/bin/bash
-
 git add .
-git commit -m albertgit
+git commit -m testinfo
 git push
