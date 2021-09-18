@@ -28,7 +28,7 @@ namespace ProduceTools.Extensions
         public void NewBranch(string branchName) => GitCommand.GitCommandExcute(this.Src, $"git checkout -b {branchName}");
         public void Pull() => GitCommand.GitCommandExcute(this.Src, "git pull");
         public void Commit() => GitCommand.GitCommandExcute(this.Src, "git commit -am update");
-        public void Commit(string commitNote) => GitCommand.GitCommandExcute(this.Src, $"git commit -m {commitNote}");
+        public void Commit(string commitNote) => GitCommand.GitCommandExcute(this.Src, $"git commit -m \"{commitNote}\"");
         public void Stash() => GitCommand.GitCommandExcute(this.Src, "git stash");
         public void Push() => GitCommand.GitCommandExcute(this.Src, "git push");
         public void Push(string branchName) => GitCommand.GitCommandExcute(this.Src, $"git push --set-upstream origin {branchName}");

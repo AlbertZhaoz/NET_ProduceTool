@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using ProduceTools.Events;
 using ProduceTools.Interface;
 using System;
@@ -35,9 +36,10 @@ namespace ProduceTools.Extensions
         /// <param name="uri">爬虫URL地址</param>
         /// <param name="proxy">代理服务器</param>
         /// <returns>网页源代码</returns>
-        public async Task<string> Start(Uri uri, string proxy = null)
+        public async Task<string> Start(string proxy = null)
         {
             var personalCrawling = options.Value.PersonalCrawling;
+            Uri uri = new Uri(personalCrawling.PersonalCrawlingSite);
             return await Task.Run(() =>
             {
                 var pageSource = string.Empty;

@@ -9,7 +9,6 @@ namespace AutoConsume.Model
         public Config Pop3Config { get; set; }
         public Config Imap4Config { get; set; }
         public Config CsoConfig { get; set; }
-        public CsoConsume CsoConsumeFilePath { get; set; }
         public string PersonalAccessToken { get; set; }
     }
 }
