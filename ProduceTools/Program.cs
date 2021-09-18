@@ -21,7 +21,7 @@ namespace ProduceTools
         /// 另一种是常规Produce流程：在readme.md文件中已描述</remarks>
         static void Main(string[] args)
         {
-            Console.WriteLine(args);
+            Console.WriteLine(args[0]);
             var service = new ServiceCollection();
             service.AddScoped<GitExtension>();
 
