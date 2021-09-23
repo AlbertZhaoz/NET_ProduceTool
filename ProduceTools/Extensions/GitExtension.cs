@@ -81,6 +81,26 @@ namespace Albert.Extensions
                     loggers.LogInformation("Please input some comments like:albert self \"dll path\"");
                 }
             }
+            //更改仓库目录
+            else if ((args.Length > 0) && args[0].Contains("chrepo"))
+            {
+                if (!string.IsNullOrEmpty(args[1]))
+                {
+                    var gitExtensions = sp.GetRequiredService<IGit>();
+                    gitExtensions.ChangeSrc(args[1]);
+                    gitExtensions.GitAdd();
+                    string comment = args[1];
+                    gitExtensions.Commit(comment);
+                    gitExtensions.Push();
+                    Console.WriteLine("Run Successfully!");
+                    loggers.LogInformation("Run Successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Please input some comments.");
+                    loggers.LogInformation("Please input some comments like:albert git \"RepoPath\"");
+                }
+            }
         }
     }
 
