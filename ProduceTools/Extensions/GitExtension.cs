@@ -87,18 +87,14 @@ namespace Albert.Extensions
                 if (!string.IsNullOrEmpty(args[1]))
                 {
                     var gitExtensions = sp.GetRequiredService<IGit>();
-                    gitExtensions.ChangeSrc(args[1]);
-                    gitExtensions.GitAdd();
-                    string comment = args[1];
-                    gitExtensions.Commit(comment);
-                    gitExtensions.Push();
-                    Console.WriteLine("Run Successfully!");
-                    loggers.LogInformation("Run Successfully!");
+                    gitExtensions.ChangeSrc(args[1]);                  
+                    Console.WriteLine("ChangeRepo Successfully!");
+                    loggers.LogInformation("ChangeRepo Successfully!");
                 }
                 else
                 {
-                    Console.WriteLine("Please input some comments.");
-                    loggers.LogInformation("Please input some comments like:albert git \"RepoPath\"");
+                    Console.WriteLine("Please input repo path.");
+                    loggers.LogInformation("Please input some comments like:albert git \"repo path\"");
                 }
             }
         }
