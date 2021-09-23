@@ -20,6 +20,7 @@ environment variables Path E:\Gitee\producetool\ProduceTools\bin\Debug\net5.0
 ```
 4. Run cmd.exe to perform some supported operations like:
 ```
+albert help
 albert git "submit your comments"
 albert crawl
 albert produce(Not support currently)
