@@ -28,6 +28,10 @@ namespace Albert.Model
         /// 
         /// </summary>
         public SerilogConfig SerilogConfig { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public HelperInfo HelperInfo { get; set; }
     }
 
     public class Repo
@@ -118,6 +122,12 @@ namespace Albert.Model
     {
         public string ExceptionlessClientDefaultStartUpKey { get; set; }
         public string SerilogFilePath { get; set; }
+    }
+
+    public class HelperInfo
+    {
+        public string CmdInformation { get; set; }
+        public string RemoteRepoAddress { get; set; }
     }
 }
 

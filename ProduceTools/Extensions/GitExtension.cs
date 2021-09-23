@@ -63,6 +63,24 @@ namespace Albert.Extensions
                     loggers.LogInformation("Please input some comments like:albert git \"modify some files\"");
                 }
             }
+            //此分支作为自己开发使用，常用的一些指令
+            else if((args.Length > 0) && args[0].Contains("self"))
+            {
+                if (!string.IsNullOrEmpty(args[1]))
+                {
+                    var gitExtensions = sp.GetRequiredService<IGit>();
+                    gitExtensions.OpenInput($"cd {args[1]}");
+                    gitExtensions.ChangeSrc(args[1]);
+                    gitExtensions.OpenInput("code .");                  
+                    Console.WriteLine("Open Vscode Successfully!");
+                    loggers.LogInformation("Open Vscode Successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Please input some comments.");
+                    loggers.LogInformation("Please input some comments like:albert self \"dll path\"");
+                }
+            }
         }
     }
 

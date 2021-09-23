@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using System;
 using Serilog;
 using Serilog.Formatting.Json;
 using Albert.Interface;
@@ -26,7 +27,8 @@ namespace Albert
         /// </summary>
         /// <param name="args"></param>
         /// <remarks>
-        /// 目前预计支持四类工具:1.Git拓展：简化git流程，不需要整一大堆指令;
+        /// 目前预计支持四类工具:
+        /// 1.Git拓展：简化git流程，不需要整一大堆指令;
         /// 2.常规Produce流程：在readme.md文件中已描述；
         /// 3.常规网站的爬虫程序；
         /// 4.Azure云反爬虫的爬虫程序
@@ -38,6 +40,7 @@ namespace Albert
             {
                 sp.GetRequiredService<IGit>().RunGitExtensions(sp, args);
                 sp.GetRequiredService<ICrawler>().RunSimpleCrawlerExtension(sp, args);
+                sp.GetRequiredService<IHelper>().RunHelperInfoExtension(sp, args);
             }
         }
 
@@ -46,6 +49,7 @@ namespace Albert
             service.AddGitExtensions();
             service.AddSimpleCrawlerExtensions();
             service.AddSerilogExtensions();
+            service.AddGetHelperExtensions();
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
@@ -56,13 +60,15 @@ namespace Albert
                 .Configure<Repo>(e => rootConfig.GetSection("Repo").Bind(e))
                 .Configure<MsBuild>(e => rootConfig.GetSection("MsBuild").Bind(e))
                 .Configure<AzureDevOps>(e => rootConfig.GetSection("AzureDevOps").Bind(e))
-                .Configure<PersonalCrawling>(e => rootConfig.GetSection("PersonalCrawling").Bind(e));
+                .Configure<PersonalCrawling>(e => rootConfig.GetSection("PersonalCrawling").Bind(e))
+                .Configure<HelperInfo>(e=>rootConfig.GetSection("HelperInfo").Bind(e));
 
             using (var sp = service.BuildServiceProvider())
             {
                 var serilogExtension = sp.GetRequiredService<ISeriLog>();
                 if (serilogExtension.OpenExceptionlessClient())
                 {
+                    //配置ExceptionlessClient启动密钥,从UserSecrets-ProduceTool.Json获取
                     ExceptionlessClient.Default.Startup(serilogExtension.ExceptionlessClientDefaultStartUpKey);
                     ExceptionlessClient.Default.Configuration.SetDefaultMinLogLevel(Exceptionless.Logging.LogLevel.Trace);
                     service.AddLogging(e => {

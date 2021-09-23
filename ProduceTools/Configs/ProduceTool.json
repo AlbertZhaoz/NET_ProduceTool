@@ -1,6 +1,6 @@
 {
   "Repo": {
-    "DefaultPath": "E:\\Gitee\\producetool"
+    "DefaultPath": "F:\\AlbertZhao's Study\\producetool"
   },
   "MsBuild": {
     "Path": "ProgramFiles\\Microsoft Visual Studio\\2022\\Preview\\Common7\\Tools\\VsDevCmd.bat"
@@ -27,5 +27,9 @@
     "KeepAlive": true,
     "Method": "GET",
     "SiteJsonStoragePath": "F:\\AlbertZhao's Study\\producetool\\PersonalCrawlingSite.json"
+  },
+  "HelperInfo": {
+    "CmdInformation": "======================================\nalbert help:Show help infomation.\nalbert git \"commit your comments\":Push your code to remote repo with submission note.\nalbert crawl:Crawl normal web info.\nalbert produce:Not support currently\nalbert azure:Not support currently\n======================================",
+    "RemoteRepoAddress": "Github: https://github.com/AlbertZhaohongyong/producetool.git"
   }
 }
