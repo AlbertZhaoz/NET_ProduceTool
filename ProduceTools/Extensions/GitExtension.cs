@@ -123,7 +123,7 @@ namespace Albert.Extensions
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
                 process.StandardInput.WriteLine(command);
-                process.StandardInput.Flush();
+                //process.StandardInput.Flush();
                 process.StandardInput.Close();
                 //process.StandardInput.WriteLine("exit");
                 process.WaitForExit();
