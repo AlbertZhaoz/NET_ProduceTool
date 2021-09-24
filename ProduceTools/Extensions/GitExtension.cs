@@ -122,9 +122,10 @@ namespace Albert.Extensions
 
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
-                process.StandardInput.WriteLine(command);
-                process.StandardInput.WriteLine("exit");
+                process.StandardInput.WriteLine(command + "&exit");
+                //process.StandardInput.WriteLine("exit");
                 process.WaitForExit();
+                process.Close();
             }
         }
         private static void OutputEventHandler(Object sender, DataReceivedEventArgs e) => Console.WriteLine(e.Data);
