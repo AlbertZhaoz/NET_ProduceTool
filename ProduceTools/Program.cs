@@ -6,6 +6,7 @@ using Serilog.Formatting.Json;
 using Albert.Interface;
 using Exceptionless;
 using Albert.Model;
+using System.Data.SqlClient;
 
 namespace Albert
 {
@@ -52,6 +53,19 @@ namespace Albert
             service.AddGetHelperExtensions();
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+            //从sqlserver数据库中获取数据，暂时先手写连接字符串,设置超时时间从默认15s变为5s
+            try
+            {
+                string strConfigFromSqlserver = "Server = .; Database = AlbertConfigDb; Trusted_Connection = True;MultipleActiveResultSets=true;Connect Timeout=500";
+                configurationBuilder.AddDbConfiguration(() => new SqlConnection(strConfigFromSqlserver),
+                    reloadOnChange: true,
+                    reloadInterval: TimeSpan.FromSeconds(2),
+                    tableName: "ProduceToolConfig");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }           
             configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
             configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);           
             var rootConfig = configurationBuilder.Build();
@@ -62,7 +76,7 @@ namespace Albert
                 .Configure<AzureDevOps>(e => rootConfig.GetSection("AzureDevOps").Bind(e))
                 .Configure<PersonalCrawling>(e => rootConfig.GetSection("PersonalCrawling").Bind(e))
                 .Configure<HelperInfo>(e=>rootConfig.GetSection("HelperInfo").Bind(e));
-
+            //ToDo:Serilog Write Information to File
             using (var sp = service.BuildServiceProvider())
             {
                 var serilogExtension = sp.GetRequiredService<ISeriLog>();

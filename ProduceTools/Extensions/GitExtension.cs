@@ -102,6 +102,7 @@ namespace Albert.Extensions
 
     public static class GitCommand
     {
+        //ToDo:Fix everycommand execute exit command.
         public static void GitCommandExcute(string path, string command)
         {
             using (Process process = new Process())
