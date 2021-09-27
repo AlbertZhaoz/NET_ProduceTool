@@ -2,7 +2,7 @@
   "profiles": {
     "ProduceTools": {
       "commandName": "Project",
-      "commandLineArgs": "ProduceTools albertgit testInfo"
+      "commandLineArgs": "albert git C://Repo \"Commit\""
     }
   }
 }
