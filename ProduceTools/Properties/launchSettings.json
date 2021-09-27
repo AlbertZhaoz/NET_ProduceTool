@@ -2,7 +2,7 @@
   "profiles": {
     "ProduceTools": {
       "commandName": "Project",
-      "commandLineArgs": "albert git C://Repo \"Commit\""
+      "commandLineArgs": " albert git F:\\AlbertZhao's Study\\DotNet\\ \"update efcore\""
     }
   }
 }
