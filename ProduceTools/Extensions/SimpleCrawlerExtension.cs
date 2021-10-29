@@ -40,10 +40,18 @@ namespace Albert.Extensions
         /// <param name="uri">爬虫URL地址</param>
         /// <param name="proxy">代理服务器</param>
         /// <returns>网页源代码</returns>
-        public async Task<string> Start(string proxy = null)
+        public async Task<string> Start(string proxy = null,string inputUri = null)
         {
             var personalCrawling = options.Value.PersonalCrawling;
-            Uri uri = new Uri(personalCrawling.PersonalCrawlingSite);
+            Uri uri;
+            if (string.IsNullOrEmpty(inputUri))
+            {
+                uri = new Uri(personalCrawling.PersonalCrawlingSite);
+            }
+            else
+            {
+                uri = new Uri(inputUri);
+            }           
             return await Task.Run(() =>
             {
                 var pageSource = string.Empty;
@@ -123,7 +131,7 @@ namespace Albert.Extensions
         {
             ///普通网站的爬虫，重定向问题需要单独配置相关的设置
             if ((args.Length > 0) && args[0].Contains("crawl"))
-            {
+            {          
                 var simpleCrawlerExtension = sp.GetRequiredService<ICrawler>();
                 simpleCrawlerExtension.OnStart += (s, e) =>
                 {
@@ -144,8 +152,17 @@ namespace Albert.Extensions
                     Console.WriteLine("===============================================");
                     Console.WriteLine($"爬虫抓取任务完成！\n耗时：{e.Milliseconds}毫秒\n线程：{e.ThreadId}\n地址：{e.Uri.ToString()}");
                     loggers.LogInformation($"爬虫抓取任务完成！\n耗时：{e.Milliseconds}毫秒\n线程：{e.ThreadId}\n地址：{e.Uri.ToString()}");
-                };
-                simpleCrawlerExtension.Start().Wait();
+                };              
+                if (args[0].Contains("crawl-"))
+                {
+                    var normalWebSite = args[0].Split("-")[(args[0].Split("-")).Length - 1];
+                    simpleCrawlerExtension.Start(null, normalWebSite).Wait();
+                }
+                else
+                {
+                    simpleCrawlerExtension.Start().Wait();
+                }
+                
             }
         }
     }

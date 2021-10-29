@@ -29,7 +29,7 @@
     "SiteJsonStoragePath": "F:\\AlbertZhao's Study\\producetool\\PersonalCrawlingSite.json"
   },
   "HelperInfo": {
-    "CmdInformation": "======================================\nalbert help:Show help infomation.\nalbert git \"commit your comments\":Push your code to remote repo with submission note.\nalbert chrepo \"repo path\":Change repo path.\nalbert crawl:Crawl normal web info.\nalbert produce:Not support currently\nalbert azure:Not support currently\n======================================",
+    "CmdInformation": "======================================\nalbert help:Show help infomation.\nalbert git \"commit your comments\":Push your code to remote repo with submission note.\nalbert chrepo \"repo path\":Change repo path.\nalbert crawl-inputuri:Crawl normal web info.\nalbert produce:Not support currently\nalbert azure:Not support currently\n======================================",
     "RemoteRepoAddress": "Github: https://github.com/AlbertZhaohongyong/producetool.git"
   }
 }

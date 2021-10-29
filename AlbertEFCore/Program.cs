@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AlbertEFCore
@@ -32,10 +33,11 @@ namespace AlbertEFCore
         static async Task RemoveAllLine(AlbertDbContext dbCtx)
         {
             var produceToolEntities = dbCtx.ProduceToolEntity;
-            foreach (var item in produceToolEntities)
-            {
-                dbCtx.Remove(item);
-            }
+            dbCtx.RemoveRange(produceToolEntities);
+            //foreach (var item in produceToolEntities)
+            //{
+            //    dbCtx.Remove(item);
+            //}
             await dbCtx.SaveChangesAsync();
         }
 
@@ -47,6 +49,18 @@ namespace AlbertEFCore
         static async Task InitDataBase(DbContext ctx)
         {
             var jsonHelper = new JsonHelper("Configs\\ProduceTool.json");
+            //此处为第一种方式，也可以进行批量的操作，将produceToolEntity实例放入到list中进行批量增加
+            //foreach (var item in jsonHelper.ReadJsonSub())
+            //{
+            //    var produceToolEntity = new ProduceToolEntity()
+            //    {
+            //        Name = item.Key,
+            //        Value = item.Value.ToString(),
+            //    };
+            //    ctx.Add(produceToolEntity);
+            //}
+            //此处为方式二,批量增加
+            var listProduceToolEntities = new List<ProduceToolEntity>();
             foreach (var item in jsonHelper.ReadJsonSub())
             {
                 var produceToolEntity = new ProduceToolEntity()
@@ -54,8 +68,9 @@ namespace AlbertEFCore
                     Name = item.Key,
                     Value = item.Value.ToString(),
                 };
-                ctx.Add(produceToolEntity);
+                listProduceToolEntities.Add(produceToolEntity);
             }
+            await ctx.AddRangeAsync(listProduceToolEntities);
             await ctx.SaveChangesAsync();
         }
     }

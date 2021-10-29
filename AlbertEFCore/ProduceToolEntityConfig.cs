@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace AlbertEFCore
 {
+    //配置类，给表和表属性进行响应的限制
     public class ProduceToolEntityConfig : IEntityTypeConfiguration<ProduceToolEntity>
     {
         public void Configure(EntityTypeBuilder<ProduceToolEntity> builder)
