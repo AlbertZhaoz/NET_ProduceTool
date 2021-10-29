@@ -18,7 +18,7 @@ namespace Albert.Extensions
     public class SimpleCrawlerExtension : ICrawler
     {
         private readonly IOptionsSnapshot<ProduceToolEntity> options;//依赖注入可选项
-        private readonly ILogger<SimpleCrawlerExtension> loggers;
+        private readonly ILogger<SimpleCrawlerExtension> loggers; //依赖注入日志
 
         public event EventHandler<OnStartEventArgs> OnStart;//爬虫启动事件
 

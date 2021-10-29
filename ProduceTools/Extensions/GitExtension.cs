@@ -12,8 +12,8 @@ namespace Albert.Extensions
     public class GitExtension : IGit
     {
         private string Src { get; set; }
-        private readonly IOptionsSnapshot<ProduceToolEntity> options;
-        private readonly ILogger<GitExtension> loggers;
+        private readonly IOptionsSnapshot<ProduceToolEntity> options; //依赖注入可选项
+        private readonly ILogger<GitExtension> loggers; //依赖注入日志服务
 
         public GitExtension(IOptionsSnapshot<ProduceToolEntity> options, ILogger<GitExtension> loggers)
         {
@@ -45,6 +45,7 @@ namespace Albert.Extensions
         {
             ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
             ///支持albert git "commit comments" albert git repopath "commit comments"
+            var argsStr = string.Join(" ",args);
             if ((args.Length>0) && args[0].Contains("git"))
             {
                 //这个分支是albert git repopath "commit comments"

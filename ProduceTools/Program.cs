@@ -35,7 +35,7 @@ namespace Albert
         /// 4.Azure云反爬虫的爬虫程序
         /// </remarks>
         static void Main(string[] args)
-        {
+        {          
             InitService();
             using (var sp = service.BuildServiceProvider())
             {
