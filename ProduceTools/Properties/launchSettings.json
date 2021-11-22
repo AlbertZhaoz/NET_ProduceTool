@@ -2,7 +2,7 @@
   "profiles": {
     "ProduceTools": {
       "commandName": "Project",
-      "commandLineArgs": "crawl-https://www.baidu.com/"
+      "commandLineArgs": "albert self"
     }
   }
 }

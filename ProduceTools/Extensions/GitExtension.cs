@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -21,6 +22,7 @@ namespace Albert.Extensions
             this.loggers = loggers;
             this.Src = options.Value.Repo.DefaultPath;
         }
+        public void ChangeSelfWorkPath() => this.Src = this.options.Value.Repo.SelfWorkPath;
         public void ChangeSrc(string newPath) => this.Src = newPath;
         public void OpenInput(string cmd) => GitCommand.GitCommandExcute(this.Src, cmd);
         public void GitAdd() => GitCommand.GitCommandExcute(this.Src, "git add .");
@@ -46,6 +48,10 @@ namespace Albert.Extensions
             ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
             ///支持albert git "commit comments" albert git repopath "commit comments"
             var argsStr = string.Join(" ",args);
+            foreach (var item in args)
+            {
+                Console.WriteLine(item);
+            }
             if ((args.Length>0) && args[0].Contains("git"))
             {
                 //这个分支是albert git repopath "commit comments"
@@ -100,23 +106,31 @@ namespace Albert.Extensions
                 }               
             }
             //此分支作为自己开发使用，常用的一些指令
-            else if((args.Length > 0) && args[0].Contains("self"))
+            //albert self
+            else if ((args.Length > 0) && args[0].Contains("self"))
             {
-                if (!string.IsNullOrEmpty(args[1]))
+                var gitExtensions = sp.GetRequiredService<IGit>();
+                var text = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory+"Configs\\GDepsFPath.txt");
+                //切换路径到工作路径
+                ChangeSelfWorkPath();
+                Console.WriteLine(this.Src);
+                try
                 {
-                    var gitExtensions = sp.GetRequiredService<IGit>();
-                    gitExtensions.OpenInput($"cd {args[1]}");
-                    gitExtensions.ChangeSrc(args[1]);
-                    gitExtensions.OpenInput("code .");                  
-                    Console.WriteLine("Open Vscode Successfully!");
-                    loggers.LogInformation("Open Vscode Successfully!");
+                    for (int i = 0; i < text.Length; i++)
+                    {
+                        gitExtensions.OpenInput($"root");
+                        gitExtensions.OpenInput($"cd {text[i]}");
+                        gitExtensions.OpenInput($"gdpes -f");
+                        gitExtensions.OpenInput($"msbuild -t:restore");
+                        gitExtensions.OpenInput($"bcc");
+                    }
+                    loggers.LogInformation("Update Successfully!");
                 }
-                else
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Please input some comments.");
-                    loggers.LogInformation("Please input some comments like:albert self \"dll path\"");
+                    loggers.LogError(ex.Message);
                 }
-            }         
+            }
         }
     }
 
@@ -130,8 +144,10 @@ namespace Albert.Extensions
                 //Process对象如果是exe必须设置为false
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.WorkingDirectory = path;
+                //process.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe / k SET INETROOT = D:\\repo\\src & cd / d D:\\repo\\src & gvfs mount & D:\\repo\\src\\tools\\path1st\\myenv.cmd";
                 process.StartInfo.FileName = Path.Combine(Environment.SystemDirectory, "cmd.exe");
                 //标准重定向流
+                Console.WriteLine(process.StartInfo.FileName);
                 process.StartInfo.RedirectStandardInput = true;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
