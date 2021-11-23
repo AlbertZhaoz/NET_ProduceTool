@@ -158,6 +158,7 @@ namespace Albert.Extensions
 
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
+                process.StandardInput.WriteLine("\"%ProgramFiles(x86)%\\Microsoft Visual Studio\\2022\\Preview\\Common7\\Tools\\VsDevCmd.bat\"");
                 process.StandardInput.WriteLine(command + "&exit");
                 //process.StandardInput.WriteLine("exit");
                 process.WaitForExit();
