@@ -1,8 +1,7 @@
 {
   "Repo": {
     "DefaultPath": "D:\\repo\\src",
-    "SelfWorkPath": "D:\\repo\\src"
-    //"DefaultPath": "F:\\AlbertZhao's Study\\producetool"
+    "CompanyToolEnlistmentPath": "$(DefaultPath)$\\tools\\path1st\\myenv.cmd"
   },
   "MsBuild": {
     "Path": "ProgramFiles\\Microsoft Visual Studio\\2022\\Preview\\Common7\\Tools\\VsDevCmd.bat"

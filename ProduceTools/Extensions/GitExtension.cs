@@ -22,7 +22,6 @@ namespace Albert.Extensions
             this.loggers = loggers;
             this.Src = options.Value.Repo.DefaultPath;
         }
-        public void ChangeSelfWorkPath() => this.Src = this.options.Value.Repo.SelfWorkPath;
         public void ChangeSrc(string newPath) => this.Src = newPath;
         public void OpenInput(string cmd) => GitCommand.GitCommandExcute(this.Src, cmd);
         public void GitAdd() => GitCommand.GitCommandExcute(this.Src, "git add .");
@@ -48,10 +47,6 @@ namespace Albert.Extensions
             ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
             ///支持albert git "commit comments" albert git repopath "commit comments"
             var argsStr = string.Join(" ",args);
-            foreach (var item in args)
-            {
-                Console.WriteLine(item);
-            }
             if ((args.Length>0) && args[0].Contains("git"))
             {
                 //这个分支是albert git repopath "commit comments"
@@ -105,46 +100,20 @@ namespace Albert.Extensions
                     }
                 }               
             }
-            //此分支作为自己开发使用，常用的一些指令
-            //albert self
-            else if ((args.Length > 0) && args[0].Contains("self"))
-            {
-                var gitExtensions = sp.GetRequiredService<IGit>();
-                var text = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory+"Configs\\GDepsFPath.txt");
-                //切换路径到工作路径
-                ChangeSelfWorkPath();
-                Console.WriteLine(this.Src);
-                try
-                {
-                    for (int i = 0; i < text.Length; i++)
-                    {
-                        gitExtensions.OpenInput($"root");
-                        gitExtensions.OpenInput($"cd {text[i]}");
-                        gitExtensions.OpenInput($"gdpes -f");
-                        gitExtensions.OpenInput($"msbuild -t:restore");
-                        gitExtensions.OpenInput($"bcc");
-                    }
-                    loggers.LogInformation("Update Successfully!");
-                }
-                catch (Exception ex)
-                {
-                    loggers.LogError(ex.Message);
-                }
-            }
         }
     }
 
     public static class GitCommand
     {
-        //ToDo:Fix everycommand execute exit command.
+        //Fix everycommand execute exit command.
+        //批量执行最后一步退出方法在CompanyToolExtensions中已实现
         public static void GitCommandExcute(string path, string command)
         {
             using (Process process = new Process())
             {
                 //Process对象如果是exe必须设置为false
                 process.StartInfo.UseShellExecute = false;
-                process.StartInfo.WorkingDirectory = path;
-                //process.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe / k SET INETROOT = D:\\repo\\src & cd / d D:\\repo\\src & gvfs mount & D:\\repo\\src\\tools\\path1st\\myenv.cmd";
+                process.StartInfo.WorkingDirectory = path;           
                 process.StartInfo.FileName = Path.Combine(Environment.SystemDirectory, "cmd.exe");
                 //标准重定向流
                 Console.WriteLine(process.StartInfo.FileName);

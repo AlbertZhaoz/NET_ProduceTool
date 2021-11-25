@@ -26,9 +26,6 @@
     <PackageReference Include="Zack.AnyDBConfigProvider" Version="1.1.3" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Configs\GDepsFPath.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Configs\ProduceTool.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

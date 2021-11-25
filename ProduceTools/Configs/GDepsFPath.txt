@@ -1,1 +1,0 @@
-﻿sources\dev\Management\src\Management\CompliancePolicy.NetCore

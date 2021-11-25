@@ -40,7 +40,10 @@ namespace AlbertEFCore
         /// 
         /// </summary>
         public string DefaultPath { get; set; }
-        public string SelfWorkPath { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string CompanyToolEnlistmentPath { get; set; }
     }
 
     public class MsBuild

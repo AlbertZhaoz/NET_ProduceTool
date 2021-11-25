@@ -25,14 +25,17 @@ namespace Albert
         /// </para>
         /// <para>Azure云API分析：<see cref="Extensions.AzureDevOpsExtension.RunAzureDevOpsExtension"/>
         /// </para>
+        /// <para>公司流程:<see cref="Extensions.CompanyToolExtensions.RunCompanyToolExtensions"/>
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         /// <remarks>
-        /// 目前预计支持四类工具:
+        /// 目前支持五类工具:
         /// 1.Git拓展：简化git流程，不需要整一大堆指令;
         /// 2.常规Produce流程：在readme.md文件中已描述；
         /// 3.常规网站的爬虫程序；
-        /// 4.Azure云反爬虫的爬虫程序
+        /// 4.Azure云反爬虫的爬虫程序；
+        /// 5.公司流程自动化执行。
         /// </remarks>
         static void Main(string[] args)
         {          
@@ -42,6 +45,7 @@ namespace Albert
                 sp.GetRequiredService<IGit>().RunGitExtensions(sp, args);
                 sp.GetRequiredService<ICrawler>().RunSimpleCrawlerExtension(sp, args);
                 sp.GetRequiredService<IHelper>().RunHelperInfoExtension(sp, args);
+                sp.GetRequiredService<ICompanyTool>().RunCompanyToolExtensions(sp, args);
             }
         }
 
@@ -51,6 +55,7 @@ namespace Albert
             service.AddSimpleCrawlerExtensions();
             service.AddSerilogExtensions();
             service.AddGetHelperExtensions();
+            service.AddCompanyToolExtensions();
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
             //从sqlserver数据库中获取数据，暂时先手写连接字符串,设置超时时间从默认15s变为5s

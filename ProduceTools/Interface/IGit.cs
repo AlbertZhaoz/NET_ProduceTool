@@ -9,7 +9,6 @@ namespace Albert.Interface
 {
     public interface IGit
     {
-        void ChangeSelfWorkPath();
         void ChangeSrc(string newPath);
         void OpenInput(string cmd);
         void GitAdd();
