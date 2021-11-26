@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Albert.Utilities
@@ -16,7 +17,7 @@ namespace Albert.Utilities
         /// </summary>
         /// <param name="command"></param>
         /// <param name="directory"></param>
-        public static void ExecuteCmd(string command, string? directory = null)
+        public static void ExecuteCmd(string command, string directory = null)
         {
             using (var process = new Process())
             {
@@ -47,7 +48,7 @@ namespace Albert.Utilities
         /// 批量执行cmd
         /// </summary>
         /// <param name="command"></param>
-        public static void ExecuteCmd(List<string> command, string? directory = null)
+        public static void ExecuteCmd(List<string> command, string directory = null)
         {
             using (Process process = new Process())
             {
@@ -68,6 +69,7 @@ namespace Albert.Utilities
                 foreach (string com in command)
                 {
                     process.StandardInput.WriteLine(com);//输入CMD命令
+                    process.StandardInput.AutoFlush = true;
                 }
                 process.StandardInput.WriteLine("exit");//结束执行，不可或缺
                 process.StandardInput.AutoFlush = true;
@@ -77,6 +79,14 @@ namespace Albert.Utilities
         }
 
         private static void OutputEventHandler(Object sender, DataReceivedEventArgs e) => Console.WriteLine(e.Data);
-        private static void ErrorEventHandler(Object sender, DataReceivedEventArgs e) => Console.WriteLine(e.Data);
+        private static void ErrorEventHandler(Object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Data);
+            Match message = Regex.Match(e.Data, ".*error\\s+nu.*", RegexOptions.IgnoreCase);
+            if (message.Success)
+            {
+                throw new Exception(e.Data);
+            }
+        } 
     }
 }

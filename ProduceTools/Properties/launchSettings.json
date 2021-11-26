@@ -2,7 +2,7 @@
   "profiles": {
     "ProduceTools": {
       "commandName": "Project",
-      "commandLineArgs": "albert self"
+      "commandLineArgs": "albert company"
     }
   }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,6 +17,7 @@ namespace Albert.Extensions
     internal class CompanyToolExtensions:ICompanyTool
     {
         private string CompanyToolEnlistmentPath { get; set; }
+        private string Src { get; set; }
         private readonly IOptionsSnapshot<ProduceToolEntity> options; //依赖注入可选项
         private readonly ILogger<GitExtension> loggers; //依赖注入日志服务
 
@@ -23,30 +25,97 @@ namespace Albert.Extensions
         {
             this.options = options;
             this.loggers = loggers;
-            this.CompanyToolEnlistmentPath = options.Value.Repo.DefaultPath + Regex.Replace(options.Value.Repo.CompanyToolEnlistmentPath, "", options.Value.Repo.DefaultPath, RegexOptions.IgnoreCase);
+            //@"^\$.*\$" 这样的规则匹配也可以
+            this.CompanyToolEnlistmentPath =Regex.Replace(options.Value.Repo.CompanyToolEnlistmentPath, @"\$[^$]+\$", options.Value.Repo.DefaultPath, RegexOptions.IgnoreCase);
+            this.Src = options.Value.Repo.DefaultPath.Replace('\\','/');
         }
 
-        public void RunCompanyToolExtensions(IServiceProvider sp, string[] args)
+        public void EnterProducePath(string path)
+        {
+            Command.ExecuteCmd("cd \\", options.Value.Repo.DefaultPath);
+            Command.ExecuteCmd($"cd {path}", options.Value.Repo.DefaultPath);
+        }
+        public void ExcuteProduceNetcore() => Command.ExecuteCmd("produce netcore", options.Value.Repo.DefaultPath);
+        public void ExcuteGdepsF() => Command.ExecuteCmd("gdeps -f", options.Value.Repo.DefaultPath);
+        public void ExcuteMsbuildRestore() => Command.ExecuteCmd("msbuild -t:restore", options.Value.Repo.DefaultPath);
+        public void ExcuteBcc() => Command.ExecuteCmd("bcc", options.Value.Repo.DefaultPath);
+        public void ExcuteBccr() => Command.ExecuteCmd("bccr", options.Value.Repo.DefaultPath);
+        public void ExcuteGetDepsFlavorRetail() => Command.ExecuteCmd("getdeps /flavors:retail", options.Value.Repo.DefaultPath);
+
+
+        public async Task RunCompanyToolExtensions(IServiceProvider sp, string[] args)
         {
             var argsStr = string.Join(" ", args);
+            var companyToolExtensions = sp.GetRequiredService<ICompanyTool>();
+            var producePathsTxtFile = AppDomain.CurrentDomain.BaseDirectory + "Configs\\ProducePaths.txt";
+            var bccrPathsTxtFile = AppDomain.CurrentDomain.BaseDirectory + "Configs\\BccrPaths.txt";
+            //进入公司开发流程
             if ((args.Length > 0) && args[0].Contains("company"))
             {
-                var companyToolExtensions = sp.GetRequiredService<ICompanyTool>();
-                List<string> cmdList = new List<string>()
-            {
-                "D:\\repo\\src\\tools\\path1st\\myenv.cmd",
-                "cd sources/dev/Hygiene/src/DataInsights/Kql.NetCore",
-                "msbuild -t:restore",
-                "gdeps -f",
-                "cd \\",
-                "dir"
-            };
-                Command.ExecuteCmd(cmdList);
-            }
-            else
-            {
-                //loggers.LogInformation("Please input some comments like:albert company \"modify some files\"");
+                //批量Produce,采取读取Txt的方式，来批量操作相应的流程
+                if ((args.Length > 1) && args[1].Contains("produce"))
+                {
+                    if (File.Exists(producePathsTxtFile))
+                    {
+                        //读取文件路径，进入对应的Produce netcore目录下
+                        var producePathList = await File.ReadAllLinesAsync(producePathsTxtFile);
+                        List<string> strList = new List<string>();
+                        //执行bat脚本，启动Enlistment
+                        strList.Add(CompanyToolEnlistmentPath);
+                        foreach (var item in producePathList)
+                        {
+                            //进入到Produce NetFX目录
+                            strList.Add($"cd {this.Src + "/" + item}");
+                            //执行produce netcore指令
+                            strList.Add("produce netcore");
+                            //进入到Produce NetCore目录
+                            strList.Add($"cd {this.Src + "/" + item}.NetCore");
+                            //进行依赖项下载 gdeps -f
+                            strList.Add("gdeps -f");
+                            //进行msbuild -t:restore进行项目依赖项恢复
+                            strList.Add("msbuild -t:restore");
+                            //进行编译bcc
+                            strList.Add("bcc");
+                        }
+                        Command.ExecuteCmd(strList, options.Value.Repo.DefaultPath);
+                    }
+                    else
+                    {
+                        loggers.LogWarning("文件不存在");
+                    }              
+                }  
+                else if((args.Length > 1) && args[1].Contains("bccr"))
+                {                   
+                    if (File.Exists(bccrPathsTxtFile))
+                    {
+                        //读取文件路径，获取需要bccr的项目路径
+                        var bccrPathList = await File.ReadAllLinesAsync(bccrPathsTxtFile);
+                        List<string> strList = new List<string>();
+                        //执行bat脚本，启动Enlistment
+                        //strList.Add(CompanyToolEnlistmentPath);
+                        strList.Add($"gdeps -f");
+                        foreach (var item in bccrPathList)
+                        {
+                            //执行到Produce NetCore目录
+                            strList.Add($"cd {this.Src+"/"+item}.NetCore");
+                            //执行依赖项下载 gdeps -f
+                            strList.Add("gdeps -f");
+                            //执行msbuild -t:restore进行项目依赖项恢复
+                            strList.Add("msbuild -t:restore");
+                            //执行getdeps /flavors:retail
+                            strList.Add("getdeps /flavors:retail");
+                            //执行bccr编译
+                            strList.Add("build -cC");
+                        }
+                        Command.ExecuteCmd(strList, options.Value.Repo.DefaultPath);
+                    }
+                    else
+                    {
+                        loggers.LogWarning("文件不存在");
+                    }
+                }
             }
         }
+
     }
 }

@@ -7,6 +7,7 @@ using Albert.Interface;
 using Exceptionless;
 using Albert.Model;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace Albert
 {
@@ -37,7 +38,7 @@ namespace Albert
         /// 4.Azure云反爬虫的爬虫程序；
         /// 5.公司流程自动化执行。
         /// </remarks>
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {          
             InitService();
             using (var sp = service.BuildServiceProvider())
@@ -45,7 +46,7 @@ namespace Albert
                 sp.GetRequiredService<IGit>().RunGitExtensions(sp, args);
                 sp.GetRequiredService<ICrawler>().RunSimpleCrawlerExtension(sp, args);
                 sp.GetRequiredService<IHelper>().RunHelperInfoExtension(sp, args);
-                sp.GetRequiredService<ICompanyTool>().RunCompanyToolExtensions(sp, args);
+                await sp.GetRequiredService<ICompanyTool>().RunCompanyToolExtensions(sp, args);
             }
         }
 
@@ -88,6 +89,7 @@ namespace Albert
                 if (serilogExtension.OpenExceptionlessClient())
                 {
                     //配置ExceptionlessClient启动密钥,从UserSecrets-ProduceTool.Json获取
+                    //数据将记录到Exceptionless，网址为：https://be.exceptionless.io/frequent
                     ExceptionlessClient.Default.Startup(serilogExtension.ExceptionlessClientDefaultStartUpKey);
                     ExceptionlessClient.Default.Configuration.SetDefaultMinLogLevel(Exceptionless.Logging.LogLevel.Trace);
                     service.AddLogging(e => {

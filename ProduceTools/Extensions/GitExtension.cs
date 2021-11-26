@@ -22,7 +22,16 @@ namespace Albert.Extensions
             this.loggers = loggers;
             this.Src = options.Value.Repo.DefaultPath;
         }
-        public void ChangeSrc(string newPath) => this.Src = newPath;
+        public void ChangeSrc(string newPath)
+        {
+            if(newPath != default(string))
+            {
+                this.Src = newPath;
+
+            }            
+            GitCommand.GitCommandExcute(this.Src, "cd \\");
+            GitCommand.GitCommandExcute(this.Src, $"cd this.Src");
+        }
         public void OpenInput(string cmd) => GitCommand.GitCommandExcute(this.Src, cmd);
         public void GitAdd() => GitCommand.GitCommandExcute(this.Src, "git add .");
         public void GetGitVersion() => GitCommand.GitCommandExcute(this.Src, "git --version");
@@ -44,8 +53,9 @@ namespace Albert.Extensions
 
         public void RunGitExtensions(IServiceProvider sp, string[] args)
         {
-            ///执行简化流程的Git:cd ..;git add .;git commit -m xxx;git push
-            ///支持albert git "commit comments" albert git repopath "commit comments"
+            //进入自定义git分支
+            //执行简化流程的Git:cd \;cd repo;git add .;git commit -m xxx;git push
+            //支持albert git "commit comments" albert git repopath "commit comments"
             var argsStr = string.Join(" ",args);
             if ((args.Length>0) && args[0].Contains("git"))
             {
@@ -58,8 +68,7 @@ namespace Albert.Extensions
                         if (!string.IsNullOrEmpty(args[2]))
                         {
                             var gitExtensions = sp.GetRequiredService<IGit>();
-                            gitExtensions.ChangeSrc(args[1]);
-                            gitExtensions.OpenInput("cd ..");
+                            gitExtensions.ChangeSrc(args[1]);                        
                             gitExtensions.GitAdd();
                             string comment = args[2];
                             gitExtensions.Commit(comment);
@@ -79,13 +88,13 @@ namespace Albert.Extensions
                         loggers.LogInformation("Please input some comments like:albert git \"repo path\" \"comments\"");
                     }
                 }
-                //这个分支是albert git "commit comments"
+                //这个分支是albert git "commit comments" 简化一堆命令
                 else
                 {
                     if (!string.IsNullOrEmpty(args[1]))
                     {
                         var gitExtensions = sp.GetRequiredService<IGit>();
-                        gitExtensions.OpenInput("cd ..");
+                        gitExtensions.ChangeSrc(default(string));
                         gitExtensions.GitAdd();
                         string comment = args[1];
                         gitExtensions.Commit(comment);
@@ -129,7 +138,7 @@ namespace Albert.Extensions
                 process.BeginErrorReadLine();
                 process.StandardInput.WriteLine("\"%ProgramFiles(x86)%\\Microsoft Visual Studio\\2022\\Preview\\Common7\\Tools\\VsDevCmd.bat\"");
                 process.StandardInput.WriteLine(command + "&exit");
-                //process.StandardInput.WriteLine("exit");
+                process.StandardInput.AutoFlush = true;
                 process.WaitForExit();
                 process.Close();
             }

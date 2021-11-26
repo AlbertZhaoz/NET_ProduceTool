@@ -1,0 +1,3 @@
+﻿sources/dev/Hygiene/src/DataInsights/KustoDataProvider
+sources/dev/Hygiene/src/DataInsights/Common
+sources/dev/Hygiene/src/DataInsights/Kql
