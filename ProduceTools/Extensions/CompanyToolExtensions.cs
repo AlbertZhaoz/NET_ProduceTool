@@ -52,6 +52,7 @@ namespace Albert.Extensions
             //进入公司开发流程
             if ((args.Length > 0) && args[0].Contains("company"))
             {
+                //albert company produce
                 //批量Produce,采取读取Txt的方式，来批量操作相应的流程
                 if ((args.Length > 1) && args[1].Contains("produce"))
                 {
@@ -64,6 +65,8 @@ namespace Albert.Extensions
                         strList.Add(CompanyToolEnlistmentPath);
                         foreach (var item in producePathList)
                         {
+                            //将路径格式变为正确的
+                            item.Replace('\\', '/');
                             //进入到Produce NetFX目录
                             strList.Add($"cd {this.Src + "/" + item}");
                             //执行produce netcore指令
@@ -84,6 +87,7 @@ namespace Albert.Extensions
                         loggers.LogWarning("文件不存在");
                     }              
                 }  
+                //albert company bccr
                 else if((args.Length > 1) && args[1].Contains("bccr"))
                 {                   
                     if (File.Exists(bccrPathsTxtFile))
@@ -93,10 +97,15 @@ namespace Albert.Extensions
                         List<string> strList = new List<string>();
                         //执行bat脚本，启动Enlistment
                         //strList.Add(CompanyToolEnlistmentPath);
-                        strList.Add($"gdeps -f");
                         foreach (var item in bccrPathList)
                         {
-                            //执行到Produce NetCore目录
+                            item.Replace('\\', '/');
+                            string itemNetCore = $"{ this.Src + "/" + item }.NetCore";
+                            if (!Directory.Exists(itemNetCore))
+                            {
+                                itemNetCore = $"{ this.Src + "/" + item }.NetStd";
+                            }                            
+                            //执行到NetCore/NetStd目录
                             strList.Add($"cd {this.Src+"/"+item}.NetCore");
                             //执行依赖项下载 gdeps -f
                             strList.Add("gdeps -f");
@@ -104,8 +113,10 @@ namespace Albert.Extensions
                             strList.Add("msbuild -t:restore");
                             //执行getdeps /flavors:retail
                             strList.Add("getdeps /flavors:retail");
-                            //执行bccr编译
+                            //执行bcc编译
                             strList.Add("build -cC");
+                            //执行bccr编译
+                            strList.Add("build -cC retail");
                         }
                         Command.ExecuteCmd(strList, options.Value.Repo.DefaultPath);
                     }
