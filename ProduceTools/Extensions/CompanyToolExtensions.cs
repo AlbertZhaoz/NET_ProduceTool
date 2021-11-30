@@ -106,7 +106,7 @@ namespace Albert.Extensions
                                 itemNetCore = $"{ this.Src + "/" + item }.NetStd";
                             }                            
                             //执行到NetCore/NetStd目录
-                            strList.Add($"cd {this.Src+"/"+item}.NetCore");
+                            strList.Add($"cd {itemNetCore}");
                             //执行依赖项下载 gdeps -f
                             strList.Add("gdeps -f");
                             //执行msbuild -t:restore进行项目依赖项恢复
