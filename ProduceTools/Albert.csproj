@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>bc599595-d470-4a8d-befa-910679cd8ca1</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>

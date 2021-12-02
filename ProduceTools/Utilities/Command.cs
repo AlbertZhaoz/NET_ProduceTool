@@ -12,6 +12,13 @@ namespace Albert.Utilities
 {
     public static class Command
     {
+        public static List<string> DataReceiveList { get; set; } = new List<string>();
+
+        public static List<string> ReturnDataReceiveList()
+        {
+            return DataReceiveList;
+        }
+
         /// <summary>
         /// 执行单条
         /// </summary>
@@ -36,6 +43,7 @@ namespace Albert.Utilities
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
+                DataReceiveList.Clear();
 
                 // Send command and exit.
                 process.StandardInput.WriteLine(command);
@@ -78,7 +86,11 @@ namespace Albert.Utilities
             }
         }
 
-        private static void OutputEventHandler(Object sender, DataReceivedEventArgs e) => Console.WriteLine(e.Data);
+        private static void OutputEventHandler(Object sender, DataReceivedEventArgs e)
+        {           
+            DataReceiveList.Add($"{e.Data}");
+            Console.WriteLine(e.Data);
+        }
         private static void ErrorEventHandler(Object sender, DataReceivedEventArgs e)
         {
             Console.WriteLine(e.Data);
