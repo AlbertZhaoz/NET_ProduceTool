@@ -25,6 +25,11 @@ public class NpoiExcelOperationService
     {
         try
         {
+            var filePath = @"F:\Repo\producetool\NpoiExcelExample\bin\Debug\net6.0\UploadFile\AlbertNpoi_20211203171747.xls";
+            using var excelFileStream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
+            var workBook = new HSSFWorkbook(excelFileStream);
+            Console.WriteLine(workBook.NumberOfSheets); 
+
             var workbook = new HSSFWorkbook();
             var sheet = workbook.CreateSheet(DateTime.Now.ToString("%y.%M.%d"));          
             //设置顶部大标题样式
