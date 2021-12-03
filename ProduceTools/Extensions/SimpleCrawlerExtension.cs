@@ -13,6 +13,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+#pragma warning disable SYSLIB0014
+
+
 namespace Albert.Extensions
 {
     public class SimpleCrawlerExtension : ICrawler

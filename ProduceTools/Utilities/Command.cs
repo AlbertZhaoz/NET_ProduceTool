@@ -94,11 +94,12 @@ namespace Albert.Utilities
         private static void ErrorEventHandler(Object sender, DataReceivedEventArgs e)
         {
             Console.WriteLine(e.Data);
-            Match message = Regex.Match(e.Data, ".*error\\s+nu.*", RegexOptions.IgnoreCase);
-            if (message.Success)
-            {
-                throw new Exception(e.Data);
-            }
+            //暂时先不报异常
+            //Match message = Regex.Match(e.Data, ".*error\\s+nu.*", RegexOptions.IgnoreCase);
+            //if (message.Success)
+            //{
+            //    throw new Exception(e.Data);
+            //}
         } 
     }
 }
