@@ -23,7 +23,7 @@ namespace Albert.Utilities
         private static NpoiExcelHelper npoiExcelExportHelper;
         #endregion
 
-        #region IExcelProvider 成员
+        #region IExcelProvider 成员方法
         //单例
         public static NpoiExcelHelper Instance
         {
