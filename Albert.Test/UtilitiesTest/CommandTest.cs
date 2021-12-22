@@ -13,6 +13,7 @@ namespace Albert.Test
         //{
         //    DataReceiveList = Command.DataReceiveLis;
         //}
+        //直接使用MSTest.Unit
 
         [TestMethod]
         public void TestExecuteCmd()

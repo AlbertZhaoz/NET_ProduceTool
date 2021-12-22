@@ -1,5 +1,6 @@
 ﻿using Albert.Extensions;
 using Albert.Interface;
+using CliFx;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -7,7 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static void AddGitExtensions(this IServiceCollection service)
         {
-            service.AddScoped<IGit, GitExtension>();
+            //这里将GitExtension注册进去
+            service.AddScoped<GitExtension>();
         }
     }
 }

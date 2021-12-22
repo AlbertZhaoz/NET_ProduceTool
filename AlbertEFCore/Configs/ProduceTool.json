@@ -1,6 +1,6 @@
 {
   "Repo": {
-    "DefaultPath": "D:\\repo\\src",
+    "DefaultPath": "F:\\Repo\\producetool",
     "CompanyToolEnlistmentPath": "$(DefaultPath)$\\tools\\path1st\\myenv.cmd"
   },
   "MsBuild": {

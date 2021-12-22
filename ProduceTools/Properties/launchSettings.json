@@ -2,7 +2,8 @@
   "profiles": {
     "ProduceTools": {
       "commandName": "Project",
-      "commandLineArgs": "albert company"
+      "commandLineArgs": "git 'xxx'",
+      "workingDirectory": "F:\\\\Repo\\\\producetool"
     }
   }
 }

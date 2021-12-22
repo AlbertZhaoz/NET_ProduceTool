@@ -8,6 +8,8 @@ using Exceptionless;
 using Albert.Model;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using CliFx;
+using System.IO;
 
 namespace Albert
 {
@@ -18,7 +20,7 @@ namespace Albert
         /// <summary>
         /// <para>初始化DI:<see cref="InitService"/>
         /// </para>
-        /// <para>Git拓展:<see cref="Extensions.GitExtension.RunGitExtensions"/>
+        /// <para>Git拓展/>
         /// </para>
         /// <para>Produce自动化:<see cref="Extensions.ProduceExtension.RunProduceExtensions"/>
         /// </para>
@@ -41,12 +43,22 @@ namespace Albert
         static async Task Main(string[] args)
         {          
             InitService();
+            //将注入的对象创建成实例service.BuildServiceProvider()
             using (var sp = service.BuildServiceProvider())
             {
-                sp.GetRequiredService<IGit>().RunGitExtensions(sp, args);
                 sp.GetRequiredService<ICrawler>().RunSimpleCrawlerExtension(sp, args);
                 sp.GetRequiredService<IHelper>().RunHelperInfoExtension(sp, args);
                 await sp.GetRequiredService<ICompanyTool>().RunCompanyToolExtensions(sp, args);
+
+                //使用的前置条件是service要将实现ICommand接口的对象注入进去
+                //InitService()方法中:service.AddGitExtensions();实现注入
+                //从当前程序集注入所有实现ICommand接口的CMD指令
+                var application = new CliApplicationBuilder()
+               .AddCommandsFromThisAssembly()
+               .UseTypeActivator(t =>sp.GetRequiredService(t))
+               .Build();
+                //执行CMD
+                await application.RunAsync();
             }
         }
 
