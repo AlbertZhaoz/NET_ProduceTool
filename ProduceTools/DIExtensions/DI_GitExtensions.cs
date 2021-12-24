@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static void AddGitExtensions(this IServiceCollection service)
         {
-            //这里将GitExtension注册进去
+            //这里将GitExtension注册进去,用于CliFx取服务对象
             service.AddScoped<GitExtension>();
         }
     }
