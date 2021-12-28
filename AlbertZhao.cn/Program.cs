@@ -1,12 +1,19 @@
 var builder = WebApplication.CreateBuilder(args);
-var urls = new[] { "http://localhost:3000" };
+var urls = new[] { "http://localhost:3000" }; //urls最后不要加/
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
+
+//依赖注入
+builder.Services.AddFileService(); 
+builder.Services.AddScanDir(); 
+
+
+ // CORS策略
+ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(builder =>
         builder.WithOrigins(urls).AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
 

@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{B5CF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NpoiExcelExample", "..\NpoiExcelExample\NpoiExcelExample.csproj", "{430D557A-33B8-4D73-B83A-4A9E52DB9D18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlbertZhao.cn", "..\AlbertZhao.cn\AlbertZhao.cn.csproj", "{FF53FCBC-751D-4007-A3AE-FBDEFFCF79FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlbertZhao.cn", "..\AlbertZhao.cn\AlbertZhao.cn.csproj", "{FF53FCBC-751D-4007-A3AE-FBDEFFCF79FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
