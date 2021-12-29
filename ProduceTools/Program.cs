@@ -20,7 +20,7 @@ namespace Albert
         /// <summary>
         /// <para>初始化DI:<see cref="InitService"/>
         /// </para>
-        /// <para>Git拓展/>
+        /// <para>Git拓展:<see cref="Extensions.GitExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
         /// </para>
         /// <para>Produce自动化:<see cref="Extensions.ProduceExtension.RunProduceExtensions"/>
         /// </para>
@@ -65,6 +65,7 @@ namespace Albert
         static void InitService()
         {
             service.AddGitExtensions();
+            service.AddBagetExtensions();
             service.AddSimpleCrawlerExtensions();
             service.AddSerilogExtensions();
             service.AddGetHelperExtensions();
@@ -83,9 +84,9 @@ namespace Albert
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }           
+            }                       
+            configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);
             configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
-            configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);           
             var rootConfig = configurationBuilder.Build();
 
             service.AddOptions().Configure<ProduceToolEntity>(e => rootConfig.Bind(e))
@@ -93,7 +94,8 @@ namespace Albert
                 .Configure<MsBuild>(e => rootConfig.GetSection("MsBuild").Bind(e))
                 .Configure<AzureDevOps>(e => rootConfig.GetSection("AzureDevOps").Bind(e))
                 .Configure<PersonalCrawling>(e => rootConfig.GetSection("PersonalCrawling").Bind(e))
-                .Configure<HelperInfo>(e=>rootConfig.GetSection("HelperInfo").Bind(e));
+                .Configure<HelperInfo>(e => rootConfig.GetSection("HelperInfo").Bind(e))
+                .Configure<BagetRule>(e => rootConfig.GetSection("BagetRule").Bind(e));
             //ToDo:Serilog Write Information to File
             using (var sp = service.BuildServiceProvider())
             {

@@ -32,6 +32,8 @@ namespace Albert.Model
         /// 
         /// </summary>
         public HelperInfo HelperInfo { get; set; }
+
+        public BagetRule BagetRule { get; set; }
     }
 
     public class Repo
@@ -132,6 +134,14 @@ namespace Albert.Model
     {
         public string CmdInformation { get; set; }
         public string RemoteRepoAddress { get; set; }
+    }
+
+    public class BagetRule
+    {
+        public string NugetWebUrl { get; set; }
+        public string NugetKey { get; set; }
+        public string DelteBagUrl { get; set; }
+        public string SearchBagUrl { get; set; }
     }
 }
 

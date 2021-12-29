@@ -32,5 +32,11 @@
   "HelperInfo": {
     "CmdInformation": "======================================\nalbert help:Show help infomation.\nalbert git \"commit your comments\":Push your code to remote repo with submission note.\nalbert chrepo \"repo path\":Change repo path.\nalbert crawl-inputuri:Crawl normal web info.\nalbert produce:Not support currently\nalbert azure:Not support currently\n======================================",
     "RemoteRepoAddress": "Github: https://github.com/AlbertZhaohongyong/producetool.git"
+  },
+  "BagetRule": {
+    "NugetWebUrl": "http://139.196.89.233:8044",
+    "NugetKey": "",
+    "DelteBagUrl": "{0}/api/v2/package/{1}/{2}",
+    "SearchBagUrl": "{0}/v3/search"
   }
 }
