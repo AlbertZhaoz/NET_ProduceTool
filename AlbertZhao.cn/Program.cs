@@ -11,7 +11,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddFileService(); 
 builder.Services.AddScanDir(); 
 
-
  // CORS策略
  builder.Services.AddCors(options =>
     options.AddDefaultPolicy(builder =>
@@ -26,12 +25,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//启用中间件 CORS策略
+//启用中间件 CORS策略：跨域策略
 app.UseCors();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseResponseCaching(); //在UseCors之后，在MapControllers之前
 
 app.MapControllers();
 
