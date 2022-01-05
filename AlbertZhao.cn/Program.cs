@@ -32,7 +32,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseResponseCaching(); //在UseCors之后，在MapControllers之前
+//app.UseResponseCaching(); //在UseCors之后，在MapControllers之前
 
 app.MapControllers();
 
