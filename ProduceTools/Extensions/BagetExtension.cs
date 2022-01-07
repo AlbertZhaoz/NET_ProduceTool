@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Albert.Extensions
 {
-    [Command("baget",Description="Push or delete nuget-package to self nuget.org")]
+    [Command("baget", Description = "Manage baget in remote service by command.")]
     public class BagetExtension : ICommand
     {
         private readonly IOptionsSnapshot<ProduceToolEntity> options; //依赖注入可选项
@@ -32,7 +32,7 @@ namespace Albert.Extensions
         [CommandParameter(0, Description = "")]
         public SupportFunc SupportF { get; set; }
 
-        [CommandOption("deleteName", 'n',Description = "delete nuget package name.")]
+        [CommandOption("deleteName", 'n', Description = "delete nuget package name.")]
         public string DeleteName { get; set; }
 
         [CommandOption("deleteVersion", 'v', Description = "delete nuget package version.")]
@@ -91,7 +91,7 @@ namespace Albert.Extensions
                     {
                         var cmd = $"dotnet nuget push -s {this.options.Value.BagetRule.NugetWebUrl} -k " +
                             $"{this.options.Value.BagetRule.NugetKey} {item}";
-                        Command.DataReceiveList.Add(cmd);                       
+                        Command.DataReceiveList.Add(cmd);
                     }
                     Command.ExecuteCmd(Command.DataReceiveList, PushPath);
                     console.Output.WriteLine($"Push successfully.");
@@ -102,7 +102,7 @@ namespace Albert.Extensions
                     {
                         throw new InvalidOperationException("Please set NugetKey in configs/producetool.json or environment etc.");
                     }
-                    if(string.IsNullOrEmpty(DeleteName)|| string.IsNullOrEmpty(DeleteVersion))
+                    if (string.IsNullOrEmpty(DeleteName) || string.IsNullOrEmpty(DeleteVersion))
                     {
                         throw new InvalidOperationException("Please input nuget name and version");
                     }
@@ -112,11 +112,11 @@ namespace Albert.Extensions
                     if (readKey.Contains("y", StringComparison.OrdinalIgnoreCase))
                     {
                         console.Output.WriteLine($"Starting delete....");
-                        Dictionary<string, string> heads = new Dictionary<string, string>(){{"X-NuGet-ApiKey",this.options.Value.BagetRule.NugetKey}};
+                        Dictionary<string, string> heads = new Dictionary<string, string>() { { "X-NuGet-ApiKey", this.options.Value.BagetRule.NugetKey } };
                         _httpResult = new HttpHelper().Delete(
                             string.Format(
                                 this.options.Value.BagetRule.DelteBagUrl,
-                                this.options.Value.BagetRule.NugetWebUrl, 
+                                this.options.Value.BagetRule.NugetWebUrl,
                                 DeleteName,
                                 DeleteVersion), heads);
                         if (!_httpResult.result)
@@ -127,7 +127,7 @@ namespace Albert.Extensions
                         {
                             console.Output.WriteLine($"Delete successfully.");
                         }
-                    }                
+                    }
                     break;
                 default:
                     goto case SupportFunc.list;

@@ -22,6 +22,10 @@ namespace Albert
         /// </para>
         /// <para>Git拓展:<see cref="Extensions.GitExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
         /// </para>
+        /// <para>Baget拓展:<see cref="Extensions.GitExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
+        /// </para>
+        /// <para>Tool拓展:<see cref="Extensions.GitExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
+        /// </para>
         /// <para>Produce自动化:<see cref="Extensions.ProduceExtension.RunProduceExtensions"/>
         /// </para>
         /// <para>常规网站爬虫：<see cref="Extensions.SimpleCrawlerExtension.RunSimpleCrawlerExtension"/>
@@ -66,6 +70,7 @@ namespace Albert
         {
             service.AddGitExtensions();
             service.AddBagetExtensions();
+            service.AddToolExtensions();
             service.AddSimpleCrawlerExtensions();
             service.AddSerilogExtensions();
             service.AddGetHelperExtensions();

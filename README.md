@@ -6,6 +6,8 @@ This producetool is used for four items:
 2. produce(work item-->pull request-->review-->checkin)
 3. simple web crawler
 4. azure analysis
+5. baget extensions
+6. tool cp
 
 # Getting started
 
@@ -35,6 +37,8 @@ albert git "submit your comments"
 albert crawl
 albert produce(Not support currently)
 albert azure(Not support currently)
+albert baget
+albert tool cp -s SourcePath -t DestinationPath
 ```
 
 5. Others config:you need to modify bin\Debug\net5.0\Configs\ProduceTool.json
@@ -48,7 +52,7 @@ albert azure(Not support currently)
 
 # Git Extensions
 
-Inputing ``albert -git info`` is equivalent to execute combined command.
+Inputing ``albert git info`` is equivalent to execute combined command.
 
 ```
 1.cd ..
@@ -79,6 +83,15 @@ Inputing ``albert -git info`` is equivalent to execute combined command.
 # Simple web crawler
 
 Inputing ``albert -crawl`` can crawl all information of the website configured by Producetool.json(PersonalCrawlingSite)
+
+# Baget Extensions
+1. First you need modify ProduceTool.json-BagetRule:NugetWebUrl, the NugetWebUrl is your webservice address. And modify ProduceTool.json-BagetRule:NugetKey in your remote services.
+2. Second-Run cmd.exe to perform some supported operations like:
+```
+baget list:list all NugetPackage from remote service.
+baget del -n PackageName -v PackageVersion:delete the NugetPackage from remote service.
+baget push "Your local *.nupkg path":push all NugetPackage in local directory to remote service.
+```
 
 # PackageReference
 
