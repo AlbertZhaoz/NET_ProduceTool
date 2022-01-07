@@ -68,8 +68,32 @@ namespace Albert.Extensions
                             pbar.Tick();
                         });
                     }
-
-
+                    break;
+                case ToolSupportFunc.cptxt:
+                    var listCopyPaths = File.ReadAllLines(@"../Configs/ListCopyPaths.txt");
+                    listCopyPaths.ToList().ForEach(path=>{
+                        if (string.IsNullOrEmpty(path))
+                        {
+                            return;
+                        }
+                    var copyFilePaths = new List<string>();
+                    CopyDirectory(path.Split(",")[0], path.Split(",")[1], copyFilePaths);
+                    var optionsProgressBar = new ProgressBarOptions
+                    {
+                        ForegroundColor = ConsoleColor.Yellow,
+                        ForegroundColorDone = ConsoleColor.DarkGreen,
+                        BackgroundColor = ConsoleColor.DarkGray,
+                        BackgroundCharacter = '\u2593'
+                    };
+                    using (var pbar = new ProgressBar(copyFilePaths.Count, $"Copy", optionsProgressBar))
+                    {
+                        Parallel.ForEach(copyFilePaths, filePath =>
+                        {
+                            File.Copy(filePath.Split(",")[0], filePath.Split(",")[1], true);
+                            pbar.Tick();
+                        });
+                    }
+                    });
                     break;
                 default:
                     goto case ToolSupportFunc.cp;
@@ -103,6 +127,7 @@ namespace Albert.Extensions
 
     public enum ToolSupportFunc
     {
-        cp
+        cp,
+        cptxt
     }
 }
