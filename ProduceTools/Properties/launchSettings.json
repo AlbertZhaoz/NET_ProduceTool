@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "ProduceTools": {
-      "commandName": "Project",
-      "commandLineArgs": "baget push -p F:\\Repo\\producetool\\TestBagetTwo\\bin\\Release",
-      "workingDirectory": "F:\\\\Repo\\\\producetool"
-    }
-  }
-}
