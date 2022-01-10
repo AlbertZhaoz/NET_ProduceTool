@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Albert": {
+      "commandName": "Project",
+      "commandLineArgs": "tool cptxt"
+    }
+  }
+}

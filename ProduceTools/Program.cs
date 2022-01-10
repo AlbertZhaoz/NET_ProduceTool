@@ -87,7 +87,7 @@ namespace Albert
                 using (sqlConnection = new SqlConnection(strConfigFromSqlserver))
                 {
                     sqlConnection.Open();
-                }               
+                }
             }
             catch (Exception ex)
             {

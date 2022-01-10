@@ -70,7 +70,7 @@ namespace Albert.Extensions
                     }
                     break;
                 case ToolSupportFunc.cptxt:
-                    var listCopyPaths = File.ReadAllLines(@"../Configs/ListCopyPaths.txt");
+                    var listCopyPaths = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory+"Configs\\ListCopyPaths.txt");
                     listCopyPaths.ToList().ForEach(path=>{
                         if (string.IsNullOrEmpty(path))
                         {
