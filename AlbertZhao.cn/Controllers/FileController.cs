@@ -9,6 +9,7 @@ namespace AlbertZhao.cn.Controllers
     public class FileController : ControllerBase
     {
         private readonly FileService fileService;
+
         public FileController(FileService fileService)
         {
             this.fileService = fileService; 

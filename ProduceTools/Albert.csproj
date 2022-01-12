@@ -33,6 +33,9 @@
     <None Update="Configs\BccrPaths.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Configs\ListCopyPaths.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configs\ProducePaths.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,3 +1,6 @@
+using AlbertZhao.cn.DbContextExtension;
+using AlbertZhao.cn.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 var urls = new[] { "http://localhost:3000" }; //urls最后不要加/
 // Add services to the container.
@@ -10,6 +13,9 @@ builder.Services.AddSwaggerGen();
 //依赖注入
 builder.Services.AddFileService(); 
 builder.Services.AddScanDir(); 
+
+//内存缓存
+builder.Services.AddMemoryCache();
 
  // CORS策略
  builder.Services.AddCors(options =>
@@ -32,7 +38,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-//app.UseResponseCaching(); //在UseCors之后，在MapControllers之前
+//app.UseResponseCaching(); //服务器响应缓存，在UseCors之后，在MapControllers之前
 
 app.MapControllers();
 
