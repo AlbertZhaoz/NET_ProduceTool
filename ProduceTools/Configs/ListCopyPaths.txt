@@ -1,1 +1,3 @@
-\\Redmond\exchange\Build\SUBSTRATE\15.20.4904.000\target\dev\management\Microsoft.Exchange.Management.Recipient.NetCore\bin\Debug\netcoreapp3.1,D:\repo\src\target\dev\management\Microsoft.Exchange.Management.Recipient.NetCore\bin\Debug\netcoreapp3.1
+D:\ILSpy_binaries_7.1.0.6543\,D:\TestDic\
+D:\pic\,D:\TestDic\
+D:\Snipaste-2.6.6-Beta-x64,D:\TestDic\

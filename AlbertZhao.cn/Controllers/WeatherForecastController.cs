@@ -96,6 +96,12 @@ namespace AlbertZhao.cn.Controllers
         {
             return $"更新成功:{us}";
         }
+
+        [HttpGet]
+        public string LoveChen()
+        {
+            return "最爱小陈\n小陈真可爱\n么么哒\n";
+        }
     }
 
     public record Person(string firstName, string lastName)

@@ -78,22 +78,42 @@ namespace Albert
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
             //从sqlserver数据库中获取数据，暂时先手写连接字符串,设置超时时间从默认15s变为5s
+            string strConfigFromSqlserver = "Server = .; Database = AlbertConfigDb; Trusted_Connection = True;MultipleActiveResultSets=true;Connect Timeout=500";
+            SqlConnection sqlConnection = null;
+            bool sqlConnectionStatus = true;
+
             try
+            {             
+                using (sqlConnection = new SqlConnection(strConfigFromSqlserver))
+                {
+                    sqlConnection.Open();
+                }
+            }
+            catch (Exception ex)
             {
-                string strConfigFromSqlserver = "Server = .; Database = AlbertConfigDb; Trusted_Connection = True;MultipleActiveResultSets=true;Connect Timeout=500";
+                sqlConnectionStatus = false;
+                Console.WriteLine(ex.Message);
+            }
+
+            if (sqlConnectionStatus)
+            {
                 configurationBuilder.AddDbConfiguration(() => new SqlConnection(strConfigFromSqlserver),
                     reloadOnChange: true,
                     reloadInterval: TimeSpan.FromSeconds(2),
                     tableName: "ProduceToolConfig");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }                       
-            configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);
-            configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
-            var rootConfig = configurationBuilder.Build();
 
+            configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);
+            
+            //If not judge, configurationBuilder.Build() will error:can't find user-secrets
+            if(string.Equals(Environment.
+                GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),"Development",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
+            }
+           
+            var rootConfig = configurationBuilder.Build();
             service.AddOptions().Configure<ProduceToolEntity>(e => rootConfig.Bind(e))
                 .Configure<Repo>(e => rootConfig.GetSection("Repo").Bind(e))
                 .Configure<MsBuild>(e => rootConfig.GetSection("MsBuild").Bind(e))
@@ -101,6 +121,7 @@ namespace Albert
                 .Configure<PersonalCrawling>(e => rootConfig.GetSection("PersonalCrawling").Bind(e))
                 .Configure<HelperInfo>(e => rootConfig.GetSection("HelperInfo").Bind(e))
                 .Configure<BagetRule>(e => rootConfig.GetSection("BagetRule").Bind(e));
+
             //ToDo:Serilog Write Information to File
             using (var sp = service.BuildServiceProvider())
             {
