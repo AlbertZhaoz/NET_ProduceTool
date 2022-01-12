@@ -3,6 +3,9 @@ using AlbertZhao.cn.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
+using System.Linq;
 
 namespace AlbertZhao.cn.Controllers
 {
@@ -13,10 +16,12 @@ namespace AlbertZhao.cn.Controllers
         private readonly IMemoryCache memoryCache;
         private readonly ILogger<DataManagerController> logger;
 
-        public DataManagerController(IMemoryCache memoryCache, ILogger<DataManagerController> logger)
+        private readonly IDistributedCache distributedCache;
+        public DataManagerController(IMemoryCache memoryCache, ILogger<DataManagerController> logger, IDistributedCache distributedCache)
         {
             this.memoryCache = memoryCache;
             this.logger = logger;
+            this.distributedCache = distributedCache;
         }
 
         [HttpGet]
@@ -34,12 +39,12 @@ namespace AlbertZhao.cn.Controllers
                 using (var ctx = new AlbertDbContext())
                 {
                     logger.LogInformation("从数据库查询数据....");
-                    Student? stu = ctx.Students.Where(e=>e.ID == id).FirstOrDefault();
+                    Student? stu = ctx.Students.Where(e => e.ID == id).FirstOrDefault();
                     logger.LogInformation($"从数据库查询的结果是:{(stu == null ? "null" : stu)}");
                     return stu;
-                } 
+                }
             });
-            if(stu == null)
+            if (stu == null)
             {
                 return NotFound("查询的学生不存在");
             }
@@ -48,6 +53,64 @@ namespace AlbertZhao.cn.Controllers
                 return stu;
             }
         }
-        
+
+        [HttpGet]
+        public async Task<ActionResult<Student?>> GetStuRedisById(int id)
+        {
+            logger.LogInformation(id.ToString());
+            Student? student = null;
+            var s = await distributedCache.GetStringAsync("albertzhaoz" + id);
+            if (s == null)
+            {
+                logger.LogInformation("从数据库中获取");
+                if (id == 1)
+                {
+                    student = new Student()
+                    {
+                        ID = 1,
+                        Name = "Albertzhao",
+                        Age = 26,
+                        SubName = "Albert",
+                        Score = 100
+                    };
+                }
+                else if (id == 2)
+                {
+                    student = new Student()
+                    {
+                        ID = 2,
+                        Name = "Yangzhongke",
+                        Age = 43,
+                        SubName = "yang",
+                        Score = 100
+                    };
+                }
+                else
+                {
+                    student = null;
+                }
+                logger.LogInformation(JsonSerializer.Serialize(student));
+                await distributedCache.SetStringAsync("albertzhaoz" + id, JsonSerializer.Serialize(student),
+                new DistributedCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(Random.Shared.Next(5, 10))
+                });
+            }
+            else
+            {
+                logger.LogInformation("从Redis缓存中获取");
+                student = JsonSerializer.Deserialize<Student?>(s);
+            }
+
+            if (student == null)
+            {
+                return NotFound("没有此学生数据");
+            }
+            else
+            {
+                return student;
+            }
+        }
+
     }
 }

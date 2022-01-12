@@ -2,7 +2,7 @@ using AlbertZhao.cn.DbContextExtension;
 using AlbertZhao.cn.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-var urls = new[] { "http://localhost:3000" }; //urls×îºó²»Òª¼Ó/
+var urls = new[] { "http://localhost:3000" }; //urlsï¿½ï¿½ï¿½Òªï¿½ï¿½/
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -10,17 +10,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//ÒÀÀµ×¢Èë
-builder.Services.AddFileService(); 
-builder.Services.AddScanDir(); 
+//ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½
+builder.Services.AddFileService();
+builder.Services.AddScanDir();
 
-//ÄÚ´æ»º´æ
+//å¯ç”¨åˆ†å¸ƒå¼ç¼“å­˜Redis
+builder.Services.AddStackExchangeRedisCache(options=>{
+    options.Configuration = "localhost";
+    options.InstanceName="albertzhaoz_";
+});
+
+//ï¿½Ú´æ»ºï¿½ï¿½
 builder.Services.AddMemoryCache();
 
- // CORS²ßÂÔ
- builder.Services.AddCors(options =>
-    options.AddDefaultPolicy(builder =>
-        builder.WithOrigins(urls).AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
+// CORSï¿½ï¿½ï¿½ï¿½
+builder.Services.AddCors(options =>
+   options.AddDefaultPolicy(builder =>
+       builder.WithOrigins(urls).AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
 
 var app = builder.Build();
 
@@ -31,14 +37,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//ÆôÓÃÖĞ¼ä¼ş CORS²ßÂÔ£º¿çÓò²ßÂÔ
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¼ï¿½ï¿½ CORSï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 app.UseCors();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-//app.UseResponseCaching(); //·şÎñÆ÷ÏìÓ¦»º´æ£¬ÔÚUseCorsÖ®ºó£¬ÔÚMapControllersÖ®Ç°
+//app.UseResponseCaching(); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½æ£¬ï¿½ï¿½UseCorsÖ®ï¿½ï¿½ï¿½ï¿½MapControllersÖ®Ç°
 
 app.MapControllers();
 
