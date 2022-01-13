@@ -2,7 +2,7 @@ using AlbertZhao.cn.DbContextExtension;
 using AlbertZhao.cn.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-var urls = new[] { "http://localhost:3000" }; //urls���Ҫ��/
+var urls = new[] { "http://localhost:3000" }; //urls最后不要加/
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//����ע��
+//依赖注入
 builder.Services.AddFileService();
 builder.Services.AddScanDir();
 
@@ -20,10 +20,10 @@ builder.Services.AddStackExchangeRedisCache(options=>{
     options.InstanceName="albertzhaoz_";
 });
 
-//�ڴ滺��
+//内存缓存
 builder.Services.AddMemoryCache();
 
-// CORS����
+// CORS策略
 builder.Services.AddCors(options =>
    options.AddDefaultPolicy(builder =>
        builder.WithOrigins(urls).AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
@@ -37,14 +37,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//�����м�� CORS���ԣ��������
+//启用中间件 CORS策略：跨域策略
 app.UseCors();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-//app.UseResponseCaching(); //��������Ӧ���棬��UseCors֮����MapControllers֮ǰ
+//app.UseResponseCaching(); //启用中间件 CORS策略：跨域策略
 
 app.MapControllers();
 
