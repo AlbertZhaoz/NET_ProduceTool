@@ -30,7 +30,13 @@
     <PackageReference Include="Zack.AnyDBConfigProvider" Version="1.1.3" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Configs\NugetPackageDescription.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configs\BccrPaths.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configs\ProjectDir.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Configs\ListCopyPaths.txt">

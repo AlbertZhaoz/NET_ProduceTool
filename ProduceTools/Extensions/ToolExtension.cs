@@ -7,6 +7,8 @@ using CliFx.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.Services.Common;
+using NPOI.XWPF.UserModel;
 using ShellProgressBar;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Albert.Extensions
 {
@@ -95,6 +98,55 @@ namespace Albert.Extensions
                     }
                     });
                     break;
+                case ToolSupportFunc.md:
+                    //维护一个Dic，先从md文件中读取，Key为 包名_版本号 Value为注释
+                    Dictionary<string,string> dic = new Dictionary<string,string>();
+                    var packageInfos = await File.ReadAllLinesAsync("Configs\\NugetPackageDescription.md");
+                    foreach (var package in packageInfos)
+                    {
+                        var packageInfo = package.Split(":")[0];
+                        var packageNote = package.Split(":")[1];
+                        dic.Add(packageInfo, packageNote);
+                    }
+
+                    var projDir = await File.ReadAllLinesAsync(AppDomain.CurrentDomain.BaseDirectory + "Configs\\ProjectDir.txt");
+                    List<string> listProjPaths = new List<string>();
+                    //将所有指定目录下的*.csproj路径扫描出来
+                    projDir.ToList().ForEach(path => Directory.EnumerateFiles(path, "*.csproj").ToList().ForEach(e => listProjPaths.Add(e)));
+
+                    if(listProjPaths.Count < 0)
+                    {
+                        loggers.LogInformation("所有路径下面都没有项目文件，请检查");
+                    }                  
+
+                    try
+                    {
+                        listProjPaths.ForEach(async path => {
+                            var file = await XDocument.LoadAsync(File.OpenRead(path), LoadOptions.None, console.RegisterCancellationHandler());
+                            var references = file.Root.Descendants().Where(x => x.Name == "PackageReference");
+                            foreach (XElement item in references)
+                            {
+                                var include = item.Attribute("Include").Value;
+                                var version = item.Attribute("Version").Value;
+                                var packageInfo = include + "_" + version;
+                                var packageNote = "";
+                                //如果dic里面没有包含检索出来的键值，则添加
+                                if (!dic.ContainsKey(packageInfo))
+                                {
+                                    dic.Add(packageInfo, packageNote);
+                                }
+                            }
+                        });
+
+                        var writeTexts = dic.Select(e => $"{e.Key}:{e.Value}");
+                        File.WriteAllLines("Configs\\NugetPackageDescription.md", writeTexts);
+                    }
+                    catch (Exception ex)
+                    {
+
+                       loggers.LogInformation(ex.ToString());
+                    }                    
+                    break;
                 default:
                     goto case ToolSupportFunc.cp;
             }
@@ -128,6 +180,7 @@ namespace Albert.Extensions
     public enum ToolSupportFunc
     {
         cp,
-        cptxt
+        cptxt,
+        md
     }
 }

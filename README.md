@@ -39,6 +39,8 @@ albert produce(Not support currently)
 albert azure(Not support currently)
 albert baget
 albert tool cp -s SourcePath -t DestinationPath
+albert tool cptxt
+albert tool md
 ```
 
 5. Others config:you need to modify bin\Debug\net5.0\Configs\ProduceTool.json
@@ -91,6 +93,13 @@ Inputing ``albert -crawl`` can crawl all information of the website configured b
 baget list:list all NugetPackage from remote service.
 baget del -n PackageName -v PackageVersion:delete the NugetPackage from remote service.
 baget push "Your local *.nupkg path":push all NugetPackage in local directory to remote service.
+```
+
+# Tool Extensions
+```
+albert tool cp -s SourcePath -t DestinationPath :Copy SourceDir to DestinationDir
+albert tool cptxt :Copy SourceDir to DestinationDir from Configs/ListCopyPath
+albert tool md :Automatically generates a markdown file to record the packages used by the project (config file:Configs/ProjectDir)  
 ```
 
 # PackageReference

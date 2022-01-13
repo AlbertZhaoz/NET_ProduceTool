@@ -14,14 +14,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddFileService();
 builder.Services.AddScanDir();
 
-//启用分布式缓存Redis
-builder.Services.AddStackExchangeRedisCache(options=>{
-    options.Configuration = "localhost";
-    options.InstanceName="albertzhaoz_";
-});
-
 //内存缓存
 builder.Services.AddMemoryCache();
+
+//启用分布式缓存Redis
+builder.Services.AddStackExchangeRedisCache(options => {
+    options.Configuration = "localhost";
+    options.InstanceName = "albertzhaoz_";
+});
 
 // CORS策略
 builder.Services.AddCors(options =>

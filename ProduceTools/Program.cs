@@ -22,9 +22,9 @@ namespace Albert
         /// </para>
         /// <para>Git拓展:<see cref="Extensions.GitExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
         /// </para>
-        /// <para>Baget拓展:<see cref="Extensions.GitExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
+        /// <para>Baget拓展:<see cref="Extensions.BagetExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
         /// </para>
-        /// <para>Tool拓展:<see cref="Extensions.GitExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
+        /// <para>Tool拓展:<see cref="Extensions.ToolExtension.ExecuteAsync(CliFx.Infrastructure.IConsole)"/>
         /// </para>
         /// <para>Produce自动化:<see cref="Extensions.ProduceExtension.RunProduceExtensions"/>
         /// </para>
@@ -39,10 +39,12 @@ namespace Albert
         /// <remarks>
         /// 目前支持五类工具:
         /// 1.Git拓展：简化git流程，不需要整一大堆指令;
-        /// 2.常规Produce流程：在readme.md文件中已描述；
-        /// 3.常规网站的爬虫程序；
-        /// 4.Azure云反爬虫的爬虫程序；
-        /// 5.公司流程自动化执行。
+        /// 2.Nuget包上传删掉罗列
+        /// 3.私有工具：快速拷贝整个文件夹
+        /// 4.常规Produce流程：在readme.md文件中已描述；
+        /// 5.常规网站的爬虫程序；
+        /// 6.Azure云反爬虫的爬虫程序；
+        /// 7.公司流程自动化执行。
         /// </remarks>
         static async Task Main(string[] args)
         {          
