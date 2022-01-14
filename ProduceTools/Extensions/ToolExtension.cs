@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -99,6 +100,10 @@ namespace Albert.Extensions
                     });
                     break;
                 case ToolSupportFunc.md:
+                    //这种方式也可以加载所有的程序集，但是在模式分离的情况下会找不到下一级
+                    //解决方案递归查找：https://www.cnblogs.com/qianxingmu/p/13363193.html
+                    //var assembly = Assembly.GetEntryAssembly().GetReferencedAssemblies();
+
                     //维护一个Dic，先从md文件中读取，Key为 包名_版本号 Value为注释
                     Dictionary<string,string> dic = new Dictionary<string,string>();
                     var packageInfos = await File.ReadAllLinesAsync("Configs\\NugetPackageDescription.md");
