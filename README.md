@@ -104,7 +104,7 @@ albert tool md :Automatically generates a markdown file to record the packages u
 
 # PackageReference
 
-* CliFx：Declarative framework for building command line applications
+https://github.com/AlbertZhaoz/producetool/blob/master/ProduceTools/Configs/NugetPackageDescription.md
 
 # Other Instructions
 
