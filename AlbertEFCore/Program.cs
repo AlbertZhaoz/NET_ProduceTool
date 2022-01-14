@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace AlbertEFCore
 {
+    //Migration迁移问题：包版本要统一
+    //https://stackoverflow.com/questions/62763225/i-get-an-error-when-i-add-migration-using-entity-framework-core
     internal class Program
     {
         /// <summary>
