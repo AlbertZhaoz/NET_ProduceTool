@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
-namespace Albert.Utilities
+namespace Albert.Commons.Helpers
 {
-    public static class Command
+    public class CommandHelper
     {
         public static List<string> DataReceiveList { get; set; } = new List<string>();
 
@@ -87,7 +79,7 @@ namespace Albert.Utilities
         }
 
         private static void OutputEventHandler(Object sender, DataReceivedEventArgs e)
-        {           
+        {
             DataReceiveList.Add($"{e.Data}");
             Console.WriteLine(e.Data);
         }
@@ -100,6 +92,6 @@ namespace Albert.Utilities
             //{
             //    throw new Exception(e.Data);
             //}
-        } 
+        }
     }
 }

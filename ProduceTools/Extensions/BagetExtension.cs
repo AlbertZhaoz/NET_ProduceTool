@@ -1,4 +1,5 @@
-﻿using Albert.Interface;
+﻿using Albert.Commons.Helpers;
+using Albert.Interface;
 using Albert.Model;
 using Albert.Utilities;
 using CliFx;
@@ -14,6 +15,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using HttpHelper = Albert.Utilities.HttpHelper;
 
 namespace Albert.Extensions
 {
@@ -91,9 +93,9 @@ namespace Albert.Extensions
                     {
                         var cmd = $"dotnet nuget push -s {this.options.Value.BagetRule.NugetWebUrl} -k " +
                             $"{this.options.Value.BagetRule.NugetKey} {item}";
-                        Command.DataReceiveList.Add(cmd);
+                        CommandHelper.DataReceiveList.Add(cmd);
                     }
-                    Command.ExecuteCmd(Command.DataReceiveList, PushPath);
+                    CommandHelper.ExecuteCmd(CommandHelper.DataReceiveList, PushPath);
                     console.Output.WriteLine($"Push successfully.");
 
                     break;

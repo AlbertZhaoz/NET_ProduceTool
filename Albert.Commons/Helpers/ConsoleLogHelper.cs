@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Albert.Utilities
+﻿namespace Albert.Commons.Helpers
 {
-    public static class ConsoleLog
+    public static class ConsoleLogHelper
     {
         public static void InLine(Object msg)
         {
@@ -65,16 +59,16 @@ namespace Albert.Utilities
 
         public static void LogAction(object msg, Action action)
         {
-            ConsoleLog.Message(msg, inLine: true);
+            ConsoleLogHelper.Message(msg, inLine: true);
             try
             {
                 action.Invoke();
-                ConsoleLog.Success("[DONE]");
+                ConsoleLogHelper.Success("[DONE]");
             }
             catch (Exception e)
             {
-                ConsoleLog.Error("[FAILED]");
-                ConsoleLog.Error(e);
+                ConsoleLogHelper.Error("[FAILED]");
+                ConsoleLogHelper.Error(e);
             }
         }
 

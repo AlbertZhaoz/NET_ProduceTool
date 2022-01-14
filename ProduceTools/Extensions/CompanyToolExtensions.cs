@@ -1,4 +1,5 @@
-﻿using Albert.Interface;
+﻿using Albert.Commons.Helpers;
+using Albert.Interface;
 using Albert.Model;
 using Albert.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,15 +33,15 @@ namespace Albert.Extensions
 
         public void EnterProducePath(string path)
         {
-            Command.ExecuteCmd("cd \\", options.Value.Repo.DefaultPath);
-            Command.ExecuteCmd($"cd {path}", options.Value.Repo.DefaultPath);
+            CommandHelper.ExecuteCmd("cd \\", options.Value.Repo.DefaultPath);
+            CommandHelper.ExecuteCmd($"cd {path}", options.Value.Repo.DefaultPath);
         }
-        public void ExcuteProduceNetcore() => Command.ExecuteCmd("produce netcore", options.Value.Repo.DefaultPath);
-        public void ExcuteGdepsF() => Command.ExecuteCmd("gdeps -f", options.Value.Repo.DefaultPath);
-        public void ExcuteMsbuildRestore() => Command.ExecuteCmd("msbuild -t:restore", options.Value.Repo.DefaultPath);
-        public void ExcuteBcc() => Command.ExecuteCmd("bcc", options.Value.Repo.DefaultPath);
-        public void ExcuteBccr() => Command.ExecuteCmd("bccr", options.Value.Repo.DefaultPath);
-        public void ExcuteGetDepsFlavorRetail() => Command.ExecuteCmd("getdeps /flavors:retail", options.Value.Repo.DefaultPath);
+        public void ExcuteProduceNetcore() => CommandHelper.ExecuteCmd("produce netcore", options.Value.Repo.DefaultPath);
+        public void ExcuteGdepsF() => CommandHelper.ExecuteCmd("gdeps -f", options.Value.Repo.DefaultPath);
+        public void ExcuteMsbuildRestore() => CommandHelper.ExecuteCmd("msbuild -t:restore", options.Value.Repo.DefaultPath);
+        public void ExcuteBcc() => CommandHelper.ExecuteCmd("bcc", options.Value.Repo.DefaultPath);
+        public void ExcuteBccr() => CommandHelper.ExecuteCmd("bccr", options.Value.Repo.DefaultPath);
+        public void ExcuteGetDepsFlavorRetail() => CommandHelper.ExecuteCmd("getdeps /flavors:retail", options.Value.Repo.DefaultPath);
 
 
         public async Task RunCompanyToolExtensions(IServiceProvider sp, string[] args)
@@ -80,7 +81,7 @@ namespace Albert.Extensions
                             //进行编译bcc
                             strList.Add("bcc");
                         }
-                        Command.ExecuteCmd(strList, options.Value.Repo.DefaultPath);
+                        CommandHelper.ExecuteCmd(strList, options.Value.Repo.DefaultPath);
                     }
                     else
                     {
@@ -118,7 +119,7 @@ namespace Albert.Extensions
                             //执行bccr编译
                             strList.Add("build -cC retail");
                         }
-                        Command.ExecuteCmd(strList, options.Value.Repo.DefaultPath);
+                        CommandHelper.ExecuteCmd(strList, options.Value.Repo.DefaultPath);
                     }
                     else
                     {

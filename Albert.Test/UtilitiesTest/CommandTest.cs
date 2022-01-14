@@ -1,6 +1,5 @@
-using Albert.Utilities;
+using Albert.Commons.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 
 namespace Albert.Test
 {
@@ -18,9 +17,9 @@ namespace Albert.Test
         [TestMethod]
         public void TestExecuteCmd()
         {
-            Command.ExecuteCmd("dotnet --version");
+            CommandHelper.ExecuteCmd("dotnet --version");
             var str = "6.0.100";
-            Assert.AreEqual(str, Command.DataReceiveList[4]);
+            Assert.AreEqual(str, CommandHelper.DataReceiveList[4]);
         }
     }
 }

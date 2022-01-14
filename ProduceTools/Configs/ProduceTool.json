@@ -34,7 +34,7 @@
     "RemoteRepoAddress": "Github: https://github.com/AlbertZhaohongyong/producetool.git"
   },
   "BagetRule": {
-    "NugetWebUrl": "http://139.196.89.233:8044",
+    "NugetWebUrl": "http://albertzhao.cn",
     "NugetKey": "",
     "DelteBagUrl": "{0}/api/v2/package/{1}/{2}",
     "SearchBagUrl": "{0}/v3/search"
