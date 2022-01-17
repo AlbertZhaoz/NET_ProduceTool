@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 using System.Linq;
+using Albert.Commons.Interfaces;
 
 namespace AlbertZhao.cn.Controllers
 {
@@ -17,11 +18,13 @@ namespace AlbertZhao.cn.Controllers
         private readonly ILogger<DataManagerController> logger;
 
         private readonly IDistributedCache distributedCache;
-        public DataManagerController(IMemoryCache memoryCache, ILogger<DataManagerController> logger, IDistributedCache distributedCache)
+        private readonly IDistributedCacheHelper distributedCacheHelper;
+        public DataManagerController(IMemoryCache memoryCache, ILogger<DataManagerController> logger, IDistributedCache distributedCache, IDistributedCacheHelper distributedCacheHelper)
         {
             this.memoryCache = memoryCache;
             this.logger = logger;
             this.distributedCache = distributedCache;
+            this.distributedCacheHelper = distributedCacheHelper;
         }
 
         [HttpGet]
@@ -112,5 +115,53 @@ namespace AlbertZhao.cn.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<Student?>> GetStuRedisHelperById(int id)
+        {
+            logger.LogInformation(id.ToString());
+            Student? student = await distributedCacheHelper.GetOrCreateAsync(
+                "albertzhaoz" + id, async e =>
+                   {
+                       logger.LogInformation("从数据库中获取");
+                       //避免缓存雪崩
+                       e.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(Random.Shared.Next(5, 10));
+                       Student? stuTemp = null;
+                       if (id == 1)
+                       {
+                           stuTemp = new Student()
+                           {
+                               ID = 1,
+                               Name = "Albertzhao",
+                               Age = 26,
+                               SubName = "Albert",
+                               Score = 100
+                           };
+                       }
+                       else if (id == 2)
+                       {
+                           stuTemp = new Student()
+                           {
+                               ID = 2,
+                               Name = "Yangzhongke",
+                               Age = 43,
+                               SubName = "yang",
+                               Score = 100
+                           };
+                       }
+                       else
+                       {
+                           stuTemp = null;
+                       }
+                       return stuTemp;
+                   });
+            if (student == null)
+            {
+                return NotFound("查询的学生不存在");
+            }
+            else
+            {
+                return student;
+            }
+        }
     }
 }

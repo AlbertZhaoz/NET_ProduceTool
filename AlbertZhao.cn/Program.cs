@@ -1,5 +1,8 @@
 using AlbertZhao.cn.DbContextExtension;
 using AlbertZhao.cn.Models;
+using Albert.Commons;
+using Albert.Commons.Interfaces;
+using Albert.Commons.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 var urls = new[] { "http://localhost:3000" }; //urls最后不要加/
@@ -23,8 +26,9 @@ builder.Services.AddStackExchangeRedisCache(options => {
     options.InstanceName = "albertzhaoz_";
 });
 
-//启用分布式缓存Albert.Common.Reids包
-builder.Services.AddAlbertStackExchangeRedisCache();
+
+//启用分布式缓存Albert帮助类，更加方便的使用GetOrCreateAsync方法和类型限制
+builder.Services.AddScoped<IDistributedCacheHelper, DistributedCacheHelper>();
 
 // CORS策略
 builder.Services.AddCors(options =>

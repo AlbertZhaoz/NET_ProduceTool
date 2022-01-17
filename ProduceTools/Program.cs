@@ -9,7 +9,6 @@ using Albert.Model;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using CliFx;
-using System.IO;
 
 namespace Albert
 {
