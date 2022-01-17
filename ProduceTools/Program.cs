@@ -78,33 +78,7 @@ namespace Albert
             service.AddGetHelperExtensions();
             service.AddCompanyToolExtensions();
 
-            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-            //从sqlserver数据库中获取数据，暂时先手写连接字符串,设置超时时间从默认15s变为5s
-            string strConfigFromSqlserver = "Server = .; Database = AlbertConfigDb; Trusted_Connection = True;MultipleActiveResultSets=true;Connect Timeout=500";
-            SqlConnection sqlConnection = null;
-            bool sqlConnectionStatus = true;
-
-            try
-            {             
-                using (sqlConnection = new SqlConnection(strConfigFromSqlserver))
-                {
-                    sqlConnection.Open();
-                }
-            }
-            catch (Exception ex)
-            {
-                sqlConnectionStatus = false;
-                Console.WriteLine(ex.Message);
-            }
-
-            if (sqlConnectionStatus)
-            {
-                configurationBuilder.AddDbConfiguration(() => new SqlConnection(strConfigFromSqlserver),
-                    reloadOnChange: true,
-                    reloadInterval: TimeSpan.FromSeconds(2),
-                    tableName: "ProduceToolConfig");
-            }
-
+            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();          
             configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);
             
             //If not judge, configurationBuilder.Build() will error:can't find user-secrets
@@ -112,6 +86,32 @@ namespace Albert
                 GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),"Development",
                 StringComparison.OrdinalIgnoreCase))
             {
+                //从sqlserver数据库中获取数据，暂时先手写连接字符串,设置超时时间从默认15s变为5s
+                string strConfigFromSqlserver = "Server = .; Database = AlbertConfigDb; Trusted_Connection = True;MultipleActiveResultSets=true;Connect Timeout=500";
+                SqlConnection sqlConnection = null;
+                bool sqlConnectionStatus = true;
+
+                try
+                {
+                    using (sqlConnection = new SqlConnection(strConfigFromSqlserver))
+                    {
+                        sqlConnection.Open();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    sqlConnectionStatus = false;
+                    Console.WriteLine(ex.Message);
+                }
+
+                if (sqlConnectionStatus)
+                {
+                    configurationBuilder.AddDbConfiguration(() => new SqlConnection(strConfigFromSqlserver),
+                        reloadOnChange: true,
+                        reloadInterval: TimeSpan.FromSeconds(2),
+                        tableName: "ProduceToolConfig");
+                }
+
                 configurationBuilder.AddUserSecrets<Program>();//防止机密信息上传到Github
             }
            

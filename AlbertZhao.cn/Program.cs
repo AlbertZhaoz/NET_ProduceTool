@@ -24,7 +24,7 @@ builder.Services.AddStackExchangeRedisCache(options => {
 });
 
 //启用分布式缓存Albert.Common.Reids包
-
+builder.Services.AddAlbertStackExchangeRedisCache();
 
 // CORS策略
 builder.Services.AddCors(options =>
