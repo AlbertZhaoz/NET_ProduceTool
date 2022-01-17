@@ -34,6 +34,8 @@ namespace Albert.Model
         public HelperInfo HelperInfo { get; set; }
 
         public BagetRule BagetRule { get; set; }
+
+        public ServerAddress ServerAddress { get; set; }       
     }
 
     public class Repo
@@ -142,6 +144,23 @@ namespace Albert.Model
         public string NugetKey { get; set; }
         public string DelteBagUrl { get; set; }
         public string SearchBagUrl { get; set; }
+    }
+
+    public class ServerAddress
+    {
+        public SqlServer SqlServer { get; set; }
+        public RedisServer RedisServer { get; set; }
+    }
+
+    public class SqlServer
+    {
+        public string ConnectStr { get; set; }
+    }
+
+    public class RedisServer
+    {
+        public string Configuration { get; set; }
+        public string InstanceName { get; set; }
     }
 }
 

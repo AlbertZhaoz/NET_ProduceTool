@@ -23,6 +23,9 @@ builder.Services.AddStackExchangeRedisCache(options => {
     options.InstanceName = "albertzhaoz_";
 });
 
+//启用分布式缓存Albert.Common.Reids包
+
+
 // CORS策略
 builder.Services.AddCors(options =>
    options.AddDefaultPolicy(builder =>

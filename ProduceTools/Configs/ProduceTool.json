@@ -38,5 +38,14 @@
     "NugetKey": "",
     "DelteBagUrl": "{0}/api/v2/package/{1}/{2}",
     "SearchBagUrl": "{0}/v3/search"
+  },
+  "ServerAddress": {
+    "SqlServer": {
+      "ConnectStr": "Server = .; Database = AlbertConfigDb; Trusted_Connection = True;MultipleActiveResultSets=true;Connect Timeout=500"
+    },
+    "RedisServer": {
+      "Configuration": "localhost",
+      "InstanceName": "albertzhao_"
+    }
   }
 }
