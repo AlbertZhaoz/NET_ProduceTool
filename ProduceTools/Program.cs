@@ -122,9 +122,8 @@ namespace Albert
                 .Configure<PersonalCrawling>(e => rootConfig.GetSection("PersonalCrawling").Bind(e))
                 .Configure<HelperInfo>(e => rootConfig.GetSection("HelperInfo").Bind(e))
                 .Configure<BagetRule>(e => rootConfig.GetSection("BagetRule").Bind(e))
-                .Configure<ServerAddress>(e=>rootConfig.GetSection("ServerAddress").Bind(e))
-                .Configure<SqlServer>(e=>rootConfig.GetSection("ServerAddress").GetSection("SqlServer").Bind(e))
-                .Configure<SqlServer>(e => rootConfig.GetSection("ServerAddress").GetSection("RedisServer").Bind(e));
+                .Configure<SqlServer>(e=>rootConfig.GetSection("SqlServer").Bind(e))
+                .Configure<SqlServer>(e => rootConfig.GetSection("RedisServer").Bind(e));
 
             //ToDo:Serilog Write Information to File
             using (var sp = service.BuildServiceProvider())
