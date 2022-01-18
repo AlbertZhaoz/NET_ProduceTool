@@ -106,7 +106,8 @@ namespace Albert.Extensions
 
                     //维护一个Dic，先从md文件中读取，Key为 包名_版本号 Value为注释
                     Dictionary<string,string> dic = new Dictionary<string,string>();
-                    var packageInfos = await File.ReadAllLinesAsync("Configs\\NugetPackageDescription.md");
+                    string mkdownPath = AppDomain.CurrentDomain.BaseDirectory + "Configs\\NugetPackageDescription.md";
+                    var packageInfos = await File.ReadAllLinesAsync(mkdownPath);
                     foreach (var package in packageInfos)
                     {
                         var packageInfo = package.Split(":")[0];
@@ -126,8 +127,9 @@ namespace Albert.Extensions
 
                     try
                     {
-                        listProjPaths.ForEach(async path => {
-                            var file = await XDocument.LoadAsync(File.OpenRead(path), LoadOptions.None, console.RegisterCancellationHandler());
+                        foreach (var projPath in listProjPaths)
+                        {
+                            var file = await XDocument.LoadAsync(File.OpenRead(projPath), LoadOptions.None, console.RegisterCancellationHandler());
                             var references = file.Root.Descendants().Where(x => x.Name == "PackageReference");
                             foreach (XElement item in references)
                             {
@@ -141,10 +143,11 @@ namespace Albert.Extensions
                                     dic.Add(packageInfo, packageNote);
                                 }
                             }
-                        });
+                        }
 
                         var writeTexts = dic.Select(e => $"{e.Key}:{e.Value}");
-                        File.WriteAllLines("Configs\\NugetPackageDescription.md", writeTexts);
+                        File.WriteAllLines(mkdownPath, writeTexts);
+                        loggers.LogInformation($"Success:{mkdownPath}");
                     }
                     catch (Exception ex)
                     {

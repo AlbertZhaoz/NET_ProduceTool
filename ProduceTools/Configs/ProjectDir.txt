@@ -1,5 +1,5 @@
-F:\Repo\producetool\ProduceTools
-F:\Repo\producetool\AlbertEFCore
-F:\Repo\producetool\AlbertZhao.cn
-F:\Repo\producetool\AlbertEFCore
-F:\Repo\producetool\Albert.Test
+D:\src\producetool\ProduceTools
+D:\src\producetool\AlbertEFCore
+D:\src\producetool\AlbertZhao.cn
+D:\src\producetool\AlbertEFCore
+D:\src\producetool\Albert.Test

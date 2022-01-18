@@ -33,3 +33,12 @@ Microsoft.NET.Test.Sdk_16.5.0:微软Test框架
 MSTest.TestAdapter_2.1.0:微软Test框架
 MSTest.TestFramework_2.1.0:微软Test框架
 coverlet.collector_1.2.0:
+Albert.Commons_1.0.0:
+Microsoft.Extensions.DependencyInjection.Abstractions_6.0.0:
+Microsoft.Extensions.Options_6.0.0:
+Microsoft.EntityFrameworkCore.SqlServer_5.0.13:
+Microsoft.EntityFrameworkCore.Tools_5.0.13:
+Zack.EFCore.Batch.MSSQL_1.5.8:
+Microsoft.Extensions.Configuration.Binder_6.0.0:
+StackExchange.Redis_2.2.88:
+System.Data.SqlClient_4.8.3:
