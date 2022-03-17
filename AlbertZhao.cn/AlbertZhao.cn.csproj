@@ -1,11 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Albert.Commons" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
@@ -23,4 +21,14 @@
     <PackageReference Include="Zack.EFCore.Batch.MSSQL_NET6" Version="6.0.8" />
   </ItemGroup>
 
+	<!--Link:https://github.com/NuGet/Home/issues/4989-->
+	<!--解决StackExchange.Redis.StrongName is refrenced but not included as package-->
+	<Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+		<ItemGroup>
+			<ReferencePath Condition="'%(FileName)' == 'StackExchange.Redis.StrongName'">
+				<Aliases>signed</Aliases>
+			</ReferencePath>
+		</ItemGroup>
+	</Target>
+	
 </Project>

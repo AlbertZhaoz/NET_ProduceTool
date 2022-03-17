@@ -81,8 +81,9 @@ namespace Albert
             configurationBuilder.AddJsonFile("Configs\\ProduceTool.Json", false, true);
             
             //If not judge, configurationBuilder.Build() will error:can't find user-secrets
+            //EnvironmentVariableTarget.Machine is used for system variable value.
             if(string.Equals(Environment.
-                GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),"Development",
+                GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT",EnvironmentVariableTarget.Machine),"Development",
                 StringComparison.OrdinalIgnoreCase))
             {
                 //从sqlserver数据库中获取数据，暂时先手写连接字符串,设置超时时间从默认15s变为5s

@@ -35,7 +35,7 @@
   },
   "BagetRule": {
     "NugetWebUrl": "http://albertzhao.cn",
-    "NugetKey": "albertzhaonuget",
+    "NugetKey": "",
     "DelteBagUrl": "{0}/api/v2/package/{1}/{2}",
     "SearchBagUrl": "{0}/v3/search"
   },
