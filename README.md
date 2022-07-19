@@ -41,6 +41,7 @@ albert baget
 albert tool cp -s SourcePath -t DestinationPath
 albert tool cptxt
 albert tool md
+albert tool rename -s SourcePath
 ```
 
 5. Others config:you need to modify bin\Debug\net5.0\Configs\ProduceTool.json
@@ -100,6 +101,7 @@ baget push "Your local *.nupkg path":push all NugetPackage in local directory to
 albert tool cp -s SourcePath -t DestinationPath :Copy SourceDir to DestinationDir
 albert tool cptxt :Copy SourceDir to DestinationDir from Configs/ListCopyPath
 albert tool md :Automatically generates a markdown file to record the packages used by the project (config file:Configs/ProjectDir)  
+albert tool rename -s SourcePath :Automatically rename file in SourcePath's dirctory and move these rename files to SourcePath   
 ```
 
 # PackageReference
