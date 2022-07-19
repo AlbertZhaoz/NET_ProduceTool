@@ -9,15 +9,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlbertEFCore.Migrations
 {
     [DbContext(typeof(AlbertDbContext))]
-    [Migration("20210924054522_InitCreateDataBase")]
-    partial class InitCreateDataBase
+    [Migration("20220719012228_InitRepo")]
+    partial class InitRepo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.13")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("AlbertEFCore.ProduceToolEntity", b =>

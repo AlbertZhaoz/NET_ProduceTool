@@ -155,6 +155,40 @@ namespace Albert.Extensions
                        loggers.LogInformation(ex.ToString());
                     }                    
                     break;
+                // 此分支用于批量修改文件夹下文件名，并将重命名的文件搬到文件夹目录下
+                case ToolSupportFunc.rename:
+                    // 设置源文件夹目录
+                    if (string.IsNullOrEmpty(SourcePath))
+                    {
+                        throw new InvalidOperationException("Please set remote url in configs/producetool.json or environment.");
+                    }
+                    try
+                    {
+                        // 获取该文件夹下所有的文件夹
+                        var dirs = Directory.GetDirectories(SourcePath);
+                        // 循环遍历文件夹 并将文件夹名称修改为指定的名称 
+                        foreach (var dir in dirs)
+                        {
+                            var files = Directory.GetFiles(dir);
+                            var dirName = Path.GetFileName(dir);
+                            foreach (var file in files)
+                            {
+                                var fileName = Path.GetFileName(file);
+                                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+                                var sourceName = Path.GetFullPath(file);
+                                var targetName = SourcePath + dirName + $"_" + fileName;                              
+                                File.Move(sourceName, targetName, true);
+                                Console.WriteLine($"dirName:{dirName} fileName:{fileName}");
+                                Console.WriteLine($"sourceName:{sourceName} targetName:{targetName}");
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        throw new InvalidOperationException("Move failed.");
+                    }
+                    
+                    break;
                 default:
                     goto case ToolSupportFunc.cp;
             }
@@ -189,6 +223,7 @@ namespace Albert.Extensions
     {
         cp,
         cptxt,
-        md
+        md,
+        rename
     }
 }

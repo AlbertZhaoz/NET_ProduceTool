@@ -2,7 +2,7 @@
 
 namespace AlbertEFCore.Migrations
 {
-    public partial class InitCreateDataBase : Migration
+    public partial class InitRepo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
